@@ -61,7 +61,7 @@ fun main(args: Array<String>) {
  */
 fun seconds(hours: Int, minutes: Int, seconds: Int): Int {
     val x1 = hours * 3600
-    val x2 = minutes *   60
+    val x2 = minutes * 60
     return x1 + x2 + seconds
 }
 
