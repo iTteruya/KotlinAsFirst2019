@@ -2,13 +2,14 @@
 
 package lesson3.task1
 
-import kotlin.math.sqrt
+import kotlin.math.*
 
 /**
  * Пример
  *
  * Вычисление факториала
  */
+
 fun factorial(n: Int): Double {
     var result = 1.0
     for (i in 1..n) {
@@ -67,7 +68,15 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int {
+    var count = 0
+    var number = n
+    do {
+        number /= 10
+        count++
+    } while (number > 0)
+    return count
+}
 
 /**
  * Простая
@@ -75,7 +84,14 @@ fun digitNumber(n: Int): Int = TODO()
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int {
+    var fib1 = 1
+    var fib2 = 1
+    if (n > 2) {
+        for (i in 3..n) fib1 += fib2.also { fib2 = fib1 }
+    }
+    return fib1
+}
 
 /**
  * Простая
@@ -83,21 +99,45 @@ fun fib(n: Int): Int = TODO()
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int = TODO()
+fun lcm(m: Int, n: Int): Int {
+    var max = max(m, n)
+    var gcd = min(m, n)
+    while (max % gcd > 0) {
+        max %= gcd
+        gcd = max.also { max = gcd }
+    }
+    return (m * n / gcd)
+}
+
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int = TODO()
+fun minDivisor(n: Int): Int {
+    if (n % 2 == 0) return 2
+    if (isPrime(n)) return n
+    var mind = 3
+    while (n % mind > 0) mind += 2
+    return mind
+}
+
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int = TODO()
+fun maxDivisor(n: Int): Int {
+    if (isPrime(n)) return 1
+    var maxd = n - 1
+    for (i in n - 1 downTo 1) {
+        if (n % maxd == 0) break
+        maxd--
+    }
+    return maxd
+}
 
 /**
  * Простая
@@ -106,7 +146,15 @@ fun maxDivisor(n: Int): Int = TODO()
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean = TODO()
+fun isCoPrime(m: Int, n: Int): Boolean {
+    var max = max(m, n)
+    var gcd = min(m, n)
+    while (max % gcd > 0) {
+        max %= gcd
+        gcd = max.also { max = gcd }
+    }
+    return gcd == 1
+}
 
 /**
  * Простая
@@ -115,7 +163,16 @@ fun isCoPrime(m: Int, n: Int): Boolean = TODO()
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
+fun squareBetweenExists(m: Int, n: Int): Boolean {
+    val m = m.toDouble()
+    val n = n.toDouble()
+    var l = sqrt(m).toInt().toDouble()
+    while (l * l <= n) {
+        if (l * l in m..n) return true
+        l++
+    }
+    return false
+}
 
 /**
  * Средняя
@@ -133,7 +190,15 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int {
+    var ph = x
+    var count = 0
+    while (ph > 1) {
+        if (ph % 2 == 0) ph /= 2 else ph = ph * 3 + 1
+        count++
+    }
+    return count
+}
 
 /**
  * Средняя
@@ -164,7 +229,22 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var prc = n
+    var zn = 1
+    var rvt = 0
+    while (prc >= 10) {
+        prc /= 10
+        zn *= 10
+    }
+    var prc2 = n
+    while (zn > 0) {
+        rvt += (prc2 % 10) * zn
+        prc2 /= 10
+        zn /= 10
+    }
+    return rvt
+}
 
 /**
  * Средняя
@@ -175,7 +255,10 @@ fun revert(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean {
+    val palindrome = revert(n)
+    return (palindrome == n)
+}
 
 /**
  * Средняя
@@ -185,7 +268,17 @@ fun isPalindrome(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    if (n < 10) return false
+    var ld = n % 10
+    var od = n / 10
+    while (od > 0) {
+        if (od % 10 != ld) return true
+        ld = od % 10
+        od /= 10
+    }
+    return false
+}
 
 /**
  * Сложная
@@ -196,7 +289,33 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var sd = 4
+    var count = 3
+    if (count < n) {
+        while (count < n) {
+            while (sd * sd > 10) {
+                var ipr = sd * sd
+                var ld = 0
+                while (ipr % 10 == 0) {
+                    if (count + 1 == n) break
+                    count++
+                    ld++
+                    ipr /= 10
+                }
+                if (ld + count == n) return 0
+                var ipr2 = revert(ipr)
+                while (ipr2 > 0) {
+                    count++
+                    if (count == n) return ipr2 % 10
+                    ipr2 /= 10
+                }
+                sd++
+            }
+        }
+    }
+    return n * n
+}
 
 /**
  * Сложная
@@ -207,4 +326,30 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var sd = 7
+    var count = 6
+    if (count < n) {
+        while (count < n) {
+            while (fib(n) > 10) {
+                var ipr = fib(sd)
+                var ld = 0
+                while (ipr % 10 == 0) {
+                    if (count + 1 == n) break
+                    count++
+                    ld++
+                    ipr /= 10
+                }
+                if (ld + count == n) return 0
+                var ipr2 = revert(ipr)
+                while (ipr2 > 0) {
+                    count++
+                    if (count == n) return ipr2 % 10
+                    ipr2 /= 10
+                }
+                sd++
+            }
+        }
+    }
+    return fib(n)
+}
