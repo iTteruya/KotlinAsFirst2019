@@ -10,6 +10,8 @@ import kotlin.math.*
  * Вычисление факториала
  */
 
+fun step(x: Double, n: Double): Double = (x.pow(n) / factorial(n.toInt()))
+
 fun factorial(n: Int): Double {
     var result = 1.0
     for (i in 1..n) {
@@ -209,7 +211,27 @@ fun collatzSteps(x: Int): Int {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
-fun sin(x: Double, eps: Double): Double = TODO()
+fun sin(x: Double, eps: Double): Double {
+    if (x / PI % 2 == 1.0 || x / PI % 2 == 0.0 || x / PI % 2 == -1.0) return 0.0
+    if (x / PI % 2 == 0.5 || x / PI % 2 == -1.5) return 1.0
+    if (x / PI % 2 == 1.5 || x / PI % 2 == -0.5) return -1.0
+    var n = 3.0
+    val min = -1.0
+    var sinx = x
+    var count = 1.0
+    var q = step(x, n)
+    while (q >= eps) {
+        count += 1.0
+        sinx += min.pow(count) * q
+        n += 2.0
+        q = step(x, n)
+        if (q < eps) {
+            count += 1.0
+            sinx += min.pow(count) * q
+        }
+    }
+    return sinx
+}
 
 /**
  * Средняя
@@ -220,7 +242,27 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    if (x / PI % 2 == 0.0 || x / PI % 2 == -1.0) return 1.0
+    if (x / PI % 2 == -0.0 || x / PI % 2 == 1.0) return -1.0
+    if (x / PI % 2 == 0.5 || x / PI % 2 == -1.5 || x / PI % 2 == 1.5 || x / PI % 2 == -0.5) return 0.0
+    var n = 2.0
+    val min = -1.0
+    var cosx = x
+    var count = 1.0
+    var q = step(x, n)
+    while (q >= eps) {
+        count += 1.0
+        cosx += min.pow(count) * q
+        n += 2.0
+        q = step(x, n)
+        if (q < eps) {
+            count += 1.0
+            cosx += min.pow(count) * q
+        }
+    }
+    return cosx
+}
 
 /**
  * Средняя
