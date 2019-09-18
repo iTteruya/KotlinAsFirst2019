@@ -69,8 +69,6 @@ fun circleInside(
 ): Boolean {
     val dis = sqrt(sqr(x2 - x1) + sqr(y2 - y1))
     return (dis + r1 <= r2)
-
-
 }
 
 /**
