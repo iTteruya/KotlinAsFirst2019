@@ -74,7 +74,7 @@ fun digitNumber(n: Int): Int {
     do {
         number /= 10
         count++
-    } while (number > 0)
+    } while (number > 0 || number < 0)
     return count
 }
 
@@ -294,24 +294,19 @@ fun squareSequenceDigit(n: Int): Int {
     var count = 3
     if (count < n) {
         while (count < n) {
-            while (sd * sd > 10) {
-                var ipr = sd * sd
-                var ld = 0
-                while (ipr % 10 == 0) {
-                    if (count + 1 == n) break
-                    count++
-                    ld++
-                    ipr /= 10
+            var ipr = sd * sd
+            var pr = digitNumber(ipr)
+            if (count + pr >= n) {
+                while (pr > 0) {
+                    if (count + pr > n) {
+                        ipr /= 10
+                    }
+                    if (count + pr == n) return ipr % 10
+                    pr--
                 }
-                if (ld + count == n) return 0
-                var ipr2 = revert(ipr)
-                while (ipr2 > 0) {
-                    count++
-                    if (count == n) return ipr2 % 10
-                    ipr2 /= 10
-                }
-                sd++
             }
+            count += pr
+            sd++
         }
     }
     return n * n
@@ -331,24 +326,19 @@ fun fibSequenceDigit(n: Int): Int {
     var count = 6
     if (count < n) {
         while (count < n) {
-            while (fib(n) > 10) {
-                var ipr = fib(sd)
-                var ld = 0
-                while (ipr % 10 == 0) {
-                    if (count + 1 == n) break
-                    count++
-                    ld++
-                    ipr /= 10
+            var ipr = fib(sd)
+            var pr = digitNumber(ipr)
+            if (count + pr >= n) {
+                while (pr > 0) {
+                    if (count + pr > n) {
+                        ipr /= 10
+                    }
+                    if (count + pr == n) return ipr % 10
+                    pr--
                 }
-                if (ld + count == n) return 0
-                var ipr2 = revert(ipr)
-                while (ipr2 > 0) {
-                    count++
-                    if (count == n) return ipr2 % 10
-                    ipr2 /= 10
-                }
-                sd++
             }
+            count += pr
+            sd++
         }
     }
     return fib(n)
