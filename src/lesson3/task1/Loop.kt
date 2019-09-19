@@ -10,7 +10,6 @@ import kotlin.math.*
  * Вычисление факториала
  */
 
-fun step(x: Double, n: Double): Double = (x.pow(n) / factorial(n.toInt()))
 
 fun factorial(n: Int): Double {
     var result = 1.0
@@ -18,6 +17,18 @@ fun factorial(n: Int): Double {
         result = result * i // Please do not fix in master
     }
     return result
+}
+
+fun Taylor4sin(x: Double, n: Int): Double {
+    var x = x % ( 2 * PI)
+    var min = -1.0
+    return min.pow(n) * x.pow(2 * n + 1) / (factorial(2 * n + 1))
+}
+
+fun Taylor4cos(x: Double, n: Int): Double {
+    var x = x % ( 2 * PI)
+    var min = -1.0
+    return min.pow(n) * x.pow(2 * n) / (factorial(2 * n))
 }
 
 /**
@@ -215,23 +226,17 @@ fun sin(x: Double, eps: Double): Double {
     if (x / PI % 2 == 1.0 || x / PI % 2 == 0.0 || x / PI % 2 == -1.0) return 0.0
     if (x / PI % 2 == 0.5 || x / PI % 2 == -1.5) return 1.0
     if (x / PI % 2 == 1.5 || x / PI % 2 == -0.5) return -1.0
-    var n = 3.0
-    val min = -1.0
-    var sinx = x % (2 * PI)
-    var count = 1.0
-    var q = step(sinx, n)
+    var n = 0
+    var s = 3
+    var q = x.pow(s) / factorial(s)
     while (q >= eps) {
-        count += 1.0
-        sinx += min.pow(count) * q
-        n += 2.0
-        q = step(sinx, n)
-        if (q < eps) {
-            count += 1.0
-            sinx += min.pow(count) * q
-        }
+        n++
+        s += 2
+        q = x.pow(s) / factorial(s)
     }
-    return sinx
+    return Taylor4sin(x, n)
 }
+
 
 /**
  * Средняя
@@ -246,22 +251,15 @@ fun cos(x: Double, eps: Double): Double {
     if (x / PI % 2 == 0.0 || x / PI % 2 == -1.0) return 1.0
     if (x / PI % 2 == -0.0 || x / PI % 2 == 1.0) return -1.0
     if (x / PI % 2 == 0.5 || x / PI % 2 == -1.5 || x / PI % 2 == 1.5 || x / PI % 2 == -0.5) return 0.0
-    var n = 2.0
-    val min = -1.0
-    var cosx = x
-    var count = 1.0
-    var q = step(cosx, n)
+    var n = 0
+    var s = 3
+    var q = x.pow(s) / factorial(s)
     while (q >= eps) {
-        count += 1.0
-        cosx += min.pow(count) * q
-        n += 2.0
-        q = step(cosx, n)
-        if (q < eps) {
-            count += 1.0
-            cosx += min.pow(count) * q
-        }
+        n++
+        s += 2
+        q = x.pow(s) / factorial(s)
     }
-    return cosx
+    return Taylor4cos(x, n)
 }
 
 /**
