@@ -20,13 +20,11 @@ fun factorial(n: Int): Double {
 }
 
 fun Taylor4sin(x: Double, n: Int): Double {
-    var x = x % ( 2 * PI)
     var min = -1.0
     return min.pow(n) * x.pow(2 * n + 1) / (factorial(2 * n + 1))
 }
 
 fun Taylor4cos(x: Double, n: Int): Double {
-    var x = x % ( 2 * PI)
     var min = -1.0
     return min.pow(n) * x.pow(2 * n) / (factorial(2 * n))
 }
@@ -223,18 +221,16 @@ fun collatzSteps(x: Int): Int {
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double {
-    if (x / PI % 2 == 1.0 || x / PI % 2 == 0.0 || x / PI % 2 == -1.0) return 0.0
-    if (x / PI % 2 == 0.5 || x / PI % 2 == -1.5) return 1.0
-    if (x / PI % 2 == 1.5 || x / PI % 2 == -0.5) return -1.0
     var n = 0
-    var s = 3
-    var q = x.pow(s) / factorial(s)
-    while (q >= eps) {
+    val x = x % (2 * PI)
+    var sinx = 0.0
+    var q = Taylor4sin(x, n)
+    while (abs(q) >= eps) {
         n++
-        s += 2
-        q = x.pow(s) / factorial(s)
+        sinx += q
+        q = Taylor4sin(x, n)
     }
-    return Taylor4sin(x, n)
+    return sinx + q
 }
 
 
@@ -248,18 +244,16 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
-    if (x / PI % 2 == 0.0 || x / PI % 2 == -1.0) return 1.0
-    if (x / PI % 2 == -0.0 || x / PI % 2 == 1.0) return -1.0
-    if (x / PI % 2 == 0.5 || x / PI % 2 == -1.5 || x / PI % 2 == 1.5 || x / PI % 2 == -0.5) return 0.0
     var n = 0
-    var s = 3
-    var q = x.pow(s) / factorial(s)
-    while (q >= eps) {
+    var cosx = 0.0
+    val x = x % (2 * PI)
+    var q = x.pow(n) / factorial(n)
+    while (abs(q) >= eps) {
         n++
-        s += 2
-        q = x.pow(s) / factorial(s)
+        cosx += q
+        q = Taylor4cos(x, n)
     }
-    return Taylor4cos(x, n)
+    return cosx + q
 }
 
 /**
