@@ -217,14 +217,14 @@ fun sin(x: Double, eps: Double): Double {
     if (x / PI % 2 == 1.5 || x / PI % 2 == -0.5) return -1.0
     var n = 3.0
     val min = -1.0
-    var sinx = x
+    var sinx = x % (2 * PI)
     var count = 1.0
-    var q = step(x, n)
+    var q = step(sinx, n)
     while (q >= eps) {
         count += 1.0
         sinx += min.pow(count) * q
         n += 2.0
-        q = step(x, n)
+        q = step(sinx, n)
         if (q < eps) {
             count += 1.0
             sinx += min.pow(count) * q
@@ -250,12 +250,12 @@ fun cos(x: Double, eps: Double): Double {
     val min = -1.0
     var cosx = x
     var count = 1.0
-    var q = step(x, n)
+    var q = step(cosx, n)
     while (q >= eps) {
         count += 1.0
         cosx += min.pow(count) * q
         n += 2.0
-        q = step(x, n)
+        q = step(cosx, n)
         if (q < eps) {
             count += 1.0
             cosx += min.pow(count) * q
