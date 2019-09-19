@@ -20,12 +20,12 @@ fun factorial(n: Int): Double {
 }
 
 fun Taylor4sin(x: Double, n: Int): Double {
-    var min = -1.0
+    val min = -1.0
     return min.pow(n) * x.pow(2 * n + 1) / (factorial(2 * n + 1))
 }
 
 fun Taylor4cos(x: Double, n: Int): Double {
-    var min = -1.0
+    val min = -1.0
     return min.pow(n) * x.pow(2 * n) / (factorial(2 * n))
 }
 
@@ -175,11 +175,11 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    val m = m.toDouble()
-    val n = n.toDouble()
-    var l = sqrt(m).toInt().toDouble()
+    val dm = m.toDouble()
+    val dn = n.toDouble()
+    var l = sqrt(dm).toInt().toDouble()
     while (l * l <= n) {
-        if (l * l in m..n) return true
+        if (l * l in dm..dn) return true
         l++
     }
     return false
@@ -222,13 +222,13 @@ fun collatzSteps(x: Int): Int {
  */
 fun sin(x: Double, eps: Double): Double {
     var n = 0
-    val x = x % (2 * PI)
+    val ex = x % (2 * PI)
     var sinx = 0.0
-    var q = Taylor4sin(x, n)
+    var q = Taylor4sin(ex, n)
     while (abs(q) >= eps) {
         n++
         sinx += q
-        q = Taylor4sin(x, n)
+        q = Taylor4sin(ex, n)
     }
     return sinx + q
 }
@@ -246,13 +246,14 @@ fun sin(x: Double, eps: Double): Double {
 fun cos(x: Double, eps: Double): Double {
     var n = 0
     var cosx = 0.0
-    val x = x % (2 * PI)
-    var q = x.pow(n) / factorial(n)
+    val ex = x % (2 * PI)
+    var q = Taylor4cos(ex, n)
     while (abs(q) >= eps) {
         n++
         cosx += q
-        q = Taylor4cos(x, n)
+        q = Taylor4cos(ex, n)
     }
+
     return cosx + q
 }
 
