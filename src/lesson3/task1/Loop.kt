@@ -19,12 +19,12 @@ fun factorial(n: Int): Double {
     return result
 }
 
-fun Taylor4sin(x: Double, n: Int): Double {
+fun taylor4sin(x: Double, n: Int): Double {
     val min = -1.0
     return min.pow(n) * x.pow(2 * n + 1) / (factorial(2 * n + 1))
 }
 
-fun Taylor4cos(x: Double, n: Int): Double {
+fun taylor4cos(x: Double, n: Int): Double {
     val min = -1.0
     return min.pow(n) * x.pow(2 * n) / (factorial(2 * n))
 }
@@ -224,11 +224,11 @@ fun sin(x: Double, eps: Double): Double {
     var n = 0
     val ex = x % (2 * PI)
     var sinx = 0.0
-    var q = Taylor4sin(ex, n)
+    var q = taylor4sin(ex, n)
     while (abs(q) >= eps) {
         n++
         sinx += q
-        q = Taylor4sin(ex, n)
+        q = taylor4sin(ex, n)
     }
     return sinx + q
 }
@@ -247,11 +247,11 @@ fun cos(x: Double, eps: Double): Double {
     var n = 0
     var cosx = 0.0
     val ex = x % (2 * PI)
-    var q = Taylor4cos(ex, n)
+    var q = taylor4cos(ex, n)
     while (abs(q) >= eps) {
         n++
         cosx += q
-        q = Taylor4cos(ex, n)
+        q = taylor4cos(ex, n)
     }
 
     return cosx + q
