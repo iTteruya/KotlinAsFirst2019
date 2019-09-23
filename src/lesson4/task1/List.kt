@@ -28,7 +28,7 @@ fun sqRoots(y: Double) =
  * Найти все корни биквадратного уравнения ax^4 + bx^2 + c = 0.
  * Вернуть список корней (пустой, если корней нет)
  */
-fun biRoots(a: Double, b: Double, c: Double): List<Double> {
+fun biRoots(a: Double, b: Double, c: Double): List<Double>{
     if (a == 0.0) {
         return if (b == 0.0) listOf()
         else sqRoots(-c / b)
