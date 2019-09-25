@@ -19,14 +19,9 @@ fun factorial(n: Int): Double {
     return result
 }
 
-fun taylor4sin(x: Double, n: Int): Double {
+fun taylor(x: Double, n: Int, s: Int): Double {
     val min = -1.0
-    return min.pow(n) * x.pow(2 * n + 1) / (factorial(2 * n + 1))
-}
-
-fun taylor4cos(x: Double, n: Int): Double {
-    val min = -1.0
-    return min.pow(n) * x.pow(2 * n) / (factorial(2 * n))
+    return min.pow(s) * x.pow(n) / (factorial(n))
 }
 
 /**
@@ -142,12 +137,7 @@ fun minDivisor(n: Int): Int {
  */
 fun maxDivisor(n: Int): Int {
     if (isPrime(n)) return 1
-    var maxd = n - 1
-    for (i in n - 1 downTo 1) {
-        if (n % maxd == 0) break
-        maxd--
-    }
-    return maxd
+    return n / minDivisor(n)
 }
 
 /**
@@ -221,14 +211,16 @@ fun collatzSteps(x: Int): Int {
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double {
-    var n = 0
+    var n = 1
+    var s = 0
     val ex = x % (2 * PI)
     var sinx = 0.0
-    var q = taylor4sin(ex, n)
+    var q = taylor(ex, n, s)
     while (abs(q) >= eps) {
-        n++
+        n += 2
+        s++
         sinx += q
-        q = taylor4sin(ex, n)
+        q = taylor(ex, n, s)
     }
     return sinx + q
 }
@@ -245,13 +237,15 @@ fun sin(x: Double, eps: Double): Double {
  */
 fun cos(x: Double, eps: Double): Double {
     var n = 0
+    var s = 0
     var cosx = 0.0
     val ex = x % (2 * PI)
-    var q = taylor4cos(ex, n)
+    var q = taylor(ex, n, s)
     while (abs(q) >= eps) {
-        n++
+        s++
+        n += 2
         cosx += q
-        q = taylor4cos(ex, n)
+        q = taylor(ex, n, s)
     }
 
     return cosx + q
@@ -266,17 +260,12 @@ fun cos(x: Double, eps: Double): Double {
  */
 fun revert(n: Int): Int {
     var prc = n
-    var zn = 1
+    var zn = 10.0.pow(digitNumber(n) - 1).toInt()
     var rvt = 0
-    while (prc >= 10) {
-        prc /= 10
-        zn *= 10
-    }
-    var prc2 = n
-    while (zn > 0) {
-        rvt += (prc2 % 10) * zn
-        prc2 /= 10
+    while (prc > 0) {
+        rvt += (prc % 10) * zn
         zn /= 10
+        prc /= 10
     }
     return rvt
 }
@@ -290,10 +279,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean {
-    val palindrome = revert(n)
-    return (palindrome == n)
-}
+fun isPalindrome(n: Int): Boolean = (revert(n) == n)
 
 /**
  * Средняя

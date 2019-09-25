@@ -84,12 +84,13 @@ fun timeForHalfWay(
     t3: Double, v3: Double
 ): Double {
     val hs = (t1 * v1 + t2 * v2 + t3 * v3) / 2
-    when {
-        hs <= t1 * v1 -> return hs / v1
-        hs > t1 * v1 && hs <= (t1 * v1 + t2 * v2) -> return t1 + (hs - t1 * v1) / v2
+    return when {
+        hs <= t1 * v1 -> hs / v1
+        hs > t1 * v1 && hs <= (t1 * v1 + t2 * v2) -> t1 + (hs - t1 * v1) / v2
+        else -> t1 + t2 + (hs - t1 * v1 - t2 * v2) / v3
     }
-    return t1 + t2 + (hs - t1 * v1 - t2 * v2) / v3
 }
+
 
 /**
  * Простая
@@ -146,11 +147,11 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val min = minOf(a, b, c)
     val int = a + b + c - (min + max)
     if (max > min + int) return -1
-    when {
-        sqr(max) < sqr(min) + sqr(int) -> return 0
-        sqr(max) == sqr(min) + sqr(int) -> return 1
+    return when {
+        sqr(max) < sqr(min) + sqr(int) -> 0
+        sqr(max) == sqr(min) + sqr(int) -> 1
+        else -> 2
     }
-    return 2
 }
 
 /**
