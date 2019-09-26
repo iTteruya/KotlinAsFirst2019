@@ -11,6 +11,71 @@ import kotlin.math.pow
  *
  * Найти все корни уравнения x^2 = y
  */
+
+fun rus(n: Int, s: Int): List<String> {
+    val ff = mutableListOf<String>()
+    val n1 = n % 10
+    val n2 = n / 10 % 10
+    val n3 = n / 100
+    var w1 = ""
+    var w2 = ""
+    var w3 = ""
+    w3 = when (n3) {
+        1 -> "сто"
+        2 -> "двести"
+        3 -> "триста"
+        4 -> "четыреста"
+        5 -> "пятьсот"
+        6 -> "шестьсот"
+        7 -> "семьсот"
+        8 -> "восемьсот"
+        9 -> "девятьсот"
+        else -> ""
+    }
+    when (n2) {
+        1 -> w1 = when (n1) {
+            0 -> "десять"
+            1 -> "одиннадцать"
+            2 -> "двенадцать"
+            3 -> "тринадцать"
+            4 -> "четырнадцать"
+            5 -> "пятнадцать"
+            6 -> "шестнадцать"
+            7 -> "семнадцать"
+            8 -> "восемнадцать"
+            else -> "девятнадцать"
+        }
+        2 -> w2 = "двадцать"
+        3 -> w2 = "тридцать"
+        4 -> w2 = "сорок"
+        5 -> w2 = "пятьдесят"
+        6 -> w2 = "шестьдесят"
+        7 -> w2 = "семьдесят"
+        8 -> w2 = "восемьдесят"
+        9 -> w2 = "девяносто"
+        else -> w2 = ""
+    }
+    if (n2 != 1) w1 = when {
+        n1 == 1 && s == 1 -> "одна"
+        n1 == 2 && s == 1 -> "две"
+        n1 == 1 && s == 0 -> "один"
+        n1 == 2 && s == 0 -> "два"
+        n1 == 3 -> "три"
+        n1 == 4 -> "четыре"
+        n1 == 5 -> "пять"
+        n1 == 6 -> "шесть"
+        n1 == 7 -> "семь"
+        n1 == 8 -> "восемь"
+        n1 == 9 -> "девять"
+        else -> ""
+    }
+    if (w3 != "") ff.add(w3)
+    if (w2 != "") ff.add(w2)
+    if (w1 != "") ff.add(w1)
+    return ff
+}
+
+
 fun sqRoots(y: Double) =
     when {
         y < 0 -> listOf()
@@ -306,7 +371,22 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    val list = str.toList().map { it.toChar() }
+    val flist = mutableListOf<Int>()
+    for (i in list.indices) {
+        if (list[i] >= 'a') {
+            var char = list[i]
+            var fchar = 10
+            while (char.toString() > "a") {
+                fchar++
+                char--
+            }
+            flist.add(fchar)
+        } else flist.add(list[i].toString().toInt())
+    }
+    return decimal(flist, base)
+}
 
 /**
  * Сложная
@@ -316,7 +396,60 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    var vn = n
+    var num = ""
+    if (vn / 1000 >= 1) {
+        num += when (n / 1000) {
+            1 -> "M"
+            2 -> "MM"
+            else -> "MMM"
+        }
+        vn %= 1000
+    }
+    if (vn / 100 >= 1) {
+        num += when (vn / 100) {
+            1 -> "C"
+            2 -> "CC"
+            3 -> "CCC"
+            4 -> "CD"
+            5 -> "D"
+            6 -> "DC"
+            7 -> "DCC"
+            8 -> "DCCC"
+            else -> "CM"
+        }
+        vn %= 100
+    }
+    if (vn / 10 >= 1) {
+        num += when (vn / 10) {
+            1 -> "X"
+            2 -> "XX"
+            3 -> "XXX"
+            4 -> "XL"
+            5 -> "L"
+            6 -> "LX"
+            7 -> "LXX"
+            8 -> "LXXX"
+            else -> "XC"
+        }
+        vn %= 10
+    }
+    if (vn > 0) {
+        num += when (vn) {
+            1 -> "I"
+            2 -> "II"
+            3 -> "III"
+            4 -> "IV"
+            5 -> "V"
+            6 -> "VI"
+            7 -> "VII"
+            8 -> "VIII"
+            else -> "IX"
+        }
+    }
+    return num
+}
 
 /**
  * Очень сложная
@@ -325,4 +458,21 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    var s = 0
+    var fh = mutableListOf<String>()
+    val sh = rus(n % 1000, s)
+    val num = n / 1000
+    s = 1
+    if (num > 0) {
+        fh = rus(num, s).toMutableList()
+        if (num / 10 % 10 == 1) fh.add("тысяч") else when {
+            num % 10 == 0 -> fh.add("тысяч")
+            num % 10 == 1 -> fh.add("тысяча")
+            num % 10 in 2..4 -> fh.add("тысячи")
+            else -> fh.add("тысяч")
+        }
+    }
+    return (fh + sh).joinToString(separator = " ")
+}
+
