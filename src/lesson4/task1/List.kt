@@ -215,7 +215,7 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
 fun times(a: List<Int>, b: List<Int>): Int {
-    var c = mutableListOf<Int>()
+    val c = mutableListOf<Int>()
     for (i in a.indices) {
         c.add(a[i] * b[i])
     }
@@ -251,7 +251,6 @@ fun polynom(p: List<Int>, x: Int): Int {
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
     if (list.size == 0) return list
-    var sum = list[0]
     for (i in 1 until list.size) {
         list[i] += list[i - 1]
     }
