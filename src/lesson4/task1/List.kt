@@ -181,10 +181,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double {
-    val sv = v.map { it * it }
-    return sqrt(sv.sum())
-}
+fun abs(v: List<Double>): Double = sqrt(v.map { it * it }.sum())
 
 /**
  * Простая
@@ -193,7 +190,6 @@ fun abs(v: List<Double>): Double {
  */
 fun mean(list: List<Double>): Double = when (list.size) {
     0 -> 0.0
-    1 -> list[0]
     else -> list.sum() / list.size
 }
 
@@ -207,9 +203,7 @@ fun mean(list: List<Double>): Double = when (list.size) {
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
     val m = mean(list)
-    for (i in list.indices) {
-        list[i] -= m
-    }
+    list.replaceAll { it - m }
     return list
 }
 
@@ -221,11 +215,11 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
 fun times(a: List<Int>, b: List<Int>): Int {
-    var c = 0
+    var c = mutableListOf<Int>()
     for (i in a.indices) {
-        c += a[i] * b[i]
+        c.add(a[i] * b[i])
     }
-    return c
+    return c.fold(0) { sum, element -> sum + element }
 }
 
 
@@ -238,13 +232,11 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Значение пустого многочлена равно 0 при любом x.
  */
 fun polynom(p: List<Int>, x: Int): Int {
-    var px = 0
-    var kx = 1
+    val xp = p.toMutableList()
     for (i in p.indices) {
-        px += p[i] * kx
-        kx *= x
+        xp[i] = xp[i] * x.toDouble().pow(i).toInt()
     }
-    return px
+    return xp.fold(0) { sum, element -> sum + element }
 }
 
 /**
@@ -261,7 +253,7 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
     if (list.size == 0) return list
     var sum = list[0]
     for (i in 1 until list.size) {
-        sum += list[i].also { list[i] += sum }
+        list[i] += list[i - 1]
     }
     return list
 }
@@ -313,10 +305,7 @@ fun convert(n: Int, base: Int): List<Int> {
         pn /= base
     }
     list.add(pn)
-    for (i in 0..(list.size - 1) / 2) {
-        list[i] = list[list.size - 1 - i].also { list[list.size - 1 - i] = list[i] }
-    }
-    return list
+    return list.reversed()
 }
 
 /**
@@ -372,7 +361,7 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
-    val list = str.toList().map { it.toChar() }
+    val list = str.toList()
     val flist = mutableListOf<Int>()
     for (i in list.indices) {
         if (list[i] >= 'a') {
