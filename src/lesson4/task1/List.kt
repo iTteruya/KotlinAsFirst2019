@@ -356,57 +356,75 @@ fun decimalFromString(str: String, base: Int): Int = decimal(str.map {
  */
 fun roman(n: Int): String {
     var vn = n
-    var num = ""
+    val l = mutableListOf<String>()
     if (vn / 1000 >= 1) {
-        num += when (n / 1000) {
-            1 -> "M"
-            2 -> "MM"
-            else -> "MMM"
-        }
+        for (i in 1..vn / 1000) l.add("M")
         vn %= 1000
     }
     if (vn / 100 >= 1) {
-        num += when (vn / 100) {
-            1 -> "C"
-            2 -> "CC"
-            3 -> "CCC"
-            4 -> "CD"
-            5 -> "D"
-            6 -> "DC"
-            7 -> "DCC"
-            8 -> "DCCC"
-            else -> "CM"
+        var c = vn / 100
+        while (c > 0) {
+            when (c) {
+                in 1..3 -> l.add("C")
+                4 -> {
+                    l.add("CD")
+                    c -= 3
+                }
+                in 5..8 -> {
+                    l.add("D")
+                    c -= 4
+                }
+                else -> {
+                    l.add("CM")
+                    c -= 8
+                }
+            }
+            c--
         }
         vn %= 100
     }
     if (vn / 10 >= 1) {
-        num += when (vn / 10) {
-            1 -> "X"
-            2 -> "XX"
-            3 -> "XXX"
-            4 -> "XL"
-            5 -> "L"
-            6 -> "LX"
-            7 -> "LXX"
-            8 -> "LXXX"
-            else -> "XC"
+        var c = vn / 10
+        while (c > 0) {
+            when (c) {
+                in 1..3 -> l.add("X")
+                4 -> {
+                    l.add("XL")
+                    c -= 3
+                }
+                in 5..8 -> {
+                    l.add("L")
+                    c -= 4
+                }
+                else -> {
+                    l.add("XC")
+                    c -= 8
+                }
+            }
+            c--
         }
         vn %= 10
     }
-    if (vn > 0) {
-        num += when (vn) {
-            1 -> "I"
-            2 -> "II"
-            3 -> "III"
-            4 -> "IV"
-            5 -> "V"
-            6 -> "VI"
-            7 -> "VII"
-            8 -> "VIII"
-            else -> "IX"
+    var c = vn
+    while (c > 0) {
+        when (c) {
+            in 1..3 -> l.add("I")
+            4 -> {
+                l.add("IV")
+                c -= 3
+            }
+            in 5..8 -> {
+                l.add("V")
+                c -= 4
+            }
+            else -> {
+                l.add("IX")
+                c -= 8
+            }
         }
+        c--
     }
-    return num
+    return l.joinToString(separator = "")
 }
 
 /**
