@@ -227,6 +227,8 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
     var a = ""
+    var ex = 0
+    if (kind == "") ex = 1
     var mc = Double.MAX_VALUE
     for ((n, c) in stuff) {
         if (c.first == kind && c.second < mc) {
@@ -234,7 +236,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
             a = n
         }
     }
-    return if (a == "") null else a
+    return if (a == "" && ex == 0) null else a
 }
 
 /**
@@ -247,10 +249,10 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    val s = chars.toSet()
+    val s = chars.toSet().map { it.toLowerCase() }
     val lw = word.toCharArray()
     for (letter in lw) {
-        if (!s.contains(letter)) return false
+        if (!s.contains(letter.toLowerCase())) return false
     }
     return true
 }
@@ -296,7 +298,7 @@ fun hasAnagrams(words: List<String>): Boolean {
         val l = item.toCharArray()
         for (i in words) {
             val s = i.toCharArray().toSet()
-            if (s == l.toSet() && s.size == l.size) count++
+            if (s == l.toSet() && (s.size == l.size || (l.size != l.toSet().size && l.toSet().size == s.size))) count++
             if (count > 1) return true
         }
     }
