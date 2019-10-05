@@ -177,7 +177,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
     for ((name, v) in a) {
         l.add(v)
         for ((n2, k) in mapB) {
-            if (name == n2 && !a.containsValue(k)) l.add(k)
+            if (name == n2 && a[n2] != mapB[n2]) l.add(k)
         }
         a[name] = l.joinToString(separator = ", ")
         l.clear()
