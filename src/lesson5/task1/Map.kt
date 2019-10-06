@@ -4,6 +4,23 @@ package lesson5.task1
 
 import ru.spbstu.wheels.sorted
 
+fun listoffriends(friends: Map<String, Set<String>>): Map<String, Set<String>> {
+    val frn = mutableMapOf<String, Set<String>>()
+    for ((name, set) in friends) {
+        val uf = mutableSetOf<String>()
+        for (i in set) {
+            if (friends.containsKey(i)) uf.addAll(friends.getValue(i))
+            else {
+                frn[i] = setOf()
+            }
+            uf.remove(name)
+            uf.add(i)
+        }
+        frn[name] = uf
+    }
+    return frn
+}
+
 fun mean(list: List<Double>): Double = when (list.size) {
     0 -> 0.0
     else -> list.sum() / list.size
@@ -332,7 +349,7 @@ fun hasAnagrams(words: List<String>): Boolean {
  *        )
  */
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
-    val frn = mutableMapOf<String, Set<String>>()
+    val frn = mutableMapOf<String, Set<String>>()//Добавь рекурсивную функцию
     for ((name, set) in friends) {
         val uf = mutableSetOf<String>()
         for (i in set) {
@@ -345,7 +362,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
         }
         frn[name] = uf
     }
-    return frn
+    return listoffriends(frn)
 }
 
 /**
