@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import ru.spbstu.wheels.sorted
+
 fun mean(list: List<Double>): Double = when (list.size) {
     0 -> 0.0
     else -> list.sum() / list.size
@@ -363,7 +365,13 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    for (i in list) {
+        val num = number - i
+        if (list.contains(num) && num != i) return Pair(list.indexOf(i), list.indexOf(num)).sorted()
+    }
+    return Pair(-1, -1)
+}
 
 /**
  * Очень сложная
