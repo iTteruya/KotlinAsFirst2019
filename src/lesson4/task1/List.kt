@@ -334,15 +334,10 @@ fun decimal(digits: List<Int>, base: Int): Int =
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int = decimal(str.map {
-    if (it >= 'a') {
-        var fchar = 10
-        var np = it
-        while (np > 'a') {
-            fchar++
-            np--
-        }
-        fchar
-    } else it.toString().toInt()
+    when (it) {
+        in '0'..'9' -> it - '0'
+        else -> it - 'a' + 10
+    }
 }, base)
 
 
