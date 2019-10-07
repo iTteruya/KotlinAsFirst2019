@@ -4,21 +4,25 @@ package lesson5.task1
 
 import ru.spbstu.wheels.sorted
 
-fun listoffriends(friends: Map<String, Set<String>>): Map<String, Set<String>> {
-    val frn = mutableMapOf<String, Set<String>>()
-    for ((name, set) in friends) {
-        val uf = mutableSetOf<String>()
-        for (i in set) {
-            if (friends.containsKey(i)) uf.addAll(friends.getValue(i))
-            else {
-                frn[i] = setOf()
+fun list(
+    friends: Map<String, Set<String>>,
+    frn: Map<String, Set<String>>,
+    name: String,
+    set: MutableSet<String>
+): Set<String> {
+    for (i in set) {
+        if (frn.containsKey(i)) return set + (frn.getValue(i) - name)
+        if (friends.containsKey(i)) {
+            val y = friends.getValue(i).toMutableList()
+            y.remove(name)
+            y.removeAll(set)
+            if (y.isNotEmpty()) {
+                set.addAll(y)
+                set.addAll(list(friends, frn, i, set))
             }
-            uf.remove(name)
-            uf.add(i)
         }
-        frn[name] = uf
     }
-    return frn
+    return set
 }
 
 fun mean(list: List<Double>): Double = when (list.size) {
@@ -349,20 +353,19 @@ fun hasAnagrams(words: List<String>): Boolean {
  *        )
  */
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
-    val frn = mutableMapOf<String, Set<String>>()//Добавь рекурсивную функцию
-    for ((name, set) in friends) {
-        val uf = mutableSetOf<String>()
+    val frn = mutableMapOf<String, Set<String>>()
+    val f = friends.toMutableMap()
+    for ((_, set) in friends) {
         for (i in set) {
-            if (friends.containsKey(i)) uf.addAll(friends.getValue(i))
-            else {
-                frn[i] = setOf()
-            }
-            uf.remove(name)
-            uf.add(i)
+            if (!friends.containsKey(i)) f[i] = setOf()
         }
+    }
+    for ((name, set) in f) {
+        val x = set.toMutableSet()
+        val uf = list(f, frn, name, x)
         frn[name] = uf
     }
-    return listoffriends(frn)
+    return frn
 }
 
 /**
