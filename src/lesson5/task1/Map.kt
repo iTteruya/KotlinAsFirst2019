@@ -3,6 +3,18 @@
 package lesson5.task1
 
 import ru.spbstu.wheels.sorted
+import kotlin.math.max
+
+
+fun namelist(n: Int, k: Int, a: List<List<Int>>, w: List<Int>, nl: List<String>, set: MutableSet<String>): Set<String> {
+    if (a[n][k] == 0) return set
+    if (a[n - 1][k] == a[n][k]) namelist(n - 1, k, a, w, nl, set)
+    else {
+        set.add(nl[n])
+        namelist(n - 1, k - w[n], a, w, nl, set)
+    }
+    return set
+}
 
 fun list(
     friends: Map<String, Set<String>>,
@@ -419,4 +431,31 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val ob = mutableListOf<MutableList<Int>>()
+    for (x in 0..treasures.size) {
+        val l = mutableListOf<Int>()
+        for (y in 0..capacity) {
+            l.add(0)
+        }
+        ob.add(l)
+    }
+    val c = mutableListOf(0)
+    val w = mutableListOf(0)
+    val namelist = mutableListOf("empty")
+    val fnl = mutableSetOf<String>()
+    for ((name, pair) in treasures) {
+        c.add(pair.second)
+        w.add(pair.first)
+        namelist.add(name)
+    }
+    for (n in 1..treasures.size) {
+        for (cw in 1..capacity) {
+            if (cw >= w[n]) ob[n][cw] = max(ob[n - 1][cw], ob[n - 1][capacity - w[n]] + c[n])
+            else ob[n][cw] = ob[n - 1][cw]
+        }
+    }
+    return namelist(treasures.size, capacity, ob, w, namelist, fnl)
+}
+
+
