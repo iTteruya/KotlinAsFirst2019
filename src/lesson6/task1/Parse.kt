@@ -18,6 +18,23 @@ fun timeStrToSeconds(str: String): Int {
     return result
 }
 
+
+fun month(a: String): String = when (a.toLowerCase()) {
+    "января" -> "1"
+    "февраля" -> "2"
+    "марта" -> "3"
+    "апреля" -> "4"
+    "мая" -> "5"
+    "июня" -> "6"
+    "июля" -> "7"
+    "августа" -> "8"
+    "сентября" -> "9"
+    "октября" -> "10"
+    "ноября" -> "11"
+    "декабря" -> "12"
+    else -> a
+}
+
 /**
  * Пример
  *
@@ -69,7 +86,21 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val ps = str.split(" ")
+    if (ps.size == 3) {
+        try {
+            val day = ps[0].toInt()
+            val month = month(ps[1]).toInt()
+            val year = ps[2].toInt()
+            if (day > lesson2.task2.daysInMonth(month, year) || (day <= 0) || (month !in 1..12) || (year <= 0))
+                return ""
+            return String.format("%02d.%02d.%04d", day, month, year)
+        } catch (e: Exception) {
+            return ""
+        }
+    } else return ""
+}
 
 /**
  * Средняя
