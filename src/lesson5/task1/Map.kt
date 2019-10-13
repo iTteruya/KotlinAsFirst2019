@@ -26,16 +26,16 @@ fun list(
     for (i in set) {
         if (frn.containsKey(i)) im.addAll(set + (frn.getValue(i) - name))
         else if (friends.containsKey(i)) {
-            val y = friends.getValue(i).toMutableList()
+            val y = friends.getValue(i).toMutableSet()
             y.remove(name)
             y.removeAll(set)
             if (y.isNotEmpty()) {
                 set.addAll(y)
-                set.addAll(list(friends, frn, i, set))
+                set.addAll(list(friends, frn, i, y))
             }
         }
     }
-    return if (im.size == 0) set else set + im
+    return if (im.size == 0) set else im + set
 }
 
 fun mean(list: List<Double>): Double = when (list.size) {
