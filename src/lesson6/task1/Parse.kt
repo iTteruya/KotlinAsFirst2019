@@ -19,7 +19,7 @@ fun timeStrToSeconds(str: String): Int {
 }
 
 
-fun month(a: String): String = when (a.toLowerCase()) {
+fun month1(a: String): String = when (a.toLowerCase()) {
     "января" -> "1"
     "февраля" -> "2"
     "марта" -> "3"
@@ -32,6 +32,22 @@ fun month(a: String): String = when (a.toLowerCase()) {
     "октября" -> "10"
     "ноября" -> "11"
     "декабря" -> "12"
+    else -> a
+}
+
+fun month2(a: String): String = when (a.toLowerCase()) {
+    "01" -> "января"
+    "02" -> "февраля"
+    "03" -> "марта"
+    "04" -> "апреля"
+    "05" -> "мая"
+    "06" -> "июня"
+    "07" -> "июля"
+    "08" -> "августа"
+    "09" -> "сентября"
+    "10" -> "октября"
+    "11" -> "ноября"
+    "12" -> "декабря"
     else -> a
 }
 
@@ -91,7 +107,7 @@ fun dateStrToDigit(str: String): String {
     if (ps.size == 3) {
         try {
             val day = ps[0].toInt()
-            val month = month(ps[1]).toInt()
+            val month = month1(ps[1]).toInt()
             val year = ps[2].toInt()
             if (day > lesson2.task2.daysInMonth(month, year) || (day <= 0) || (month !in 1..12) || (year < 0))
                 return ""
@@ -112,7 +128,20 @@ fun dateStrToDigit(str: String): String {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val p = digital.split(".").toMutableList()
+    if (p.size == 3) {
+        try {
+            p[0] = p[0].toInt().toString()
+            p[1] = month2(p[1])
+            if (dateStrToDigit(p.joinToString(separator = " ")) == digital) return p.joinToString(separator = " ")
+        } catch (e: Exception) {
+            return ""
+        }
+
+    }
+    return ""
+}
 
 /**
  * Средняя
