@@ -19,24 +19,23 @@ fun namelist(n: Int, k: Int, a: List<List<Int>>, w: List<Int>, nl: List<String>,
 fun list(
     friends: Map<String, Set<String>>,
     frn: Map<String, Set<String>>,
-    name: String,
-    set: MutableSet<String>,
+    set: Set<String>,
     remove: MutableSet<String>
 ): Set<String> {
-    val im = mutableSetOf<String>()
+    val im = set.toMutableSet()
     for (i in set) {
         if (frn.containsKey(i)) im.addAll(set + (frn.getValue(i) - remove))
         else if (friends.containsKey(i)) {
             val y = friends.getValue(i).toMutableSet()
             y.removeAll(remove)
             if (y.isNotEmpty()) {
-                set.addAll(y)
+                im.addAll(y)
                 remove.addAll(y)
-                set.addAll(list(friends, frn, i, y, remove))
+                im.addAll(list(friends, frn, y, remove))
             }
         }
     }
-    return if (im.size == 0) set else im + set
+    return im
 }
 
 fun mean(list: List<Double>): Double = when (list.size) {
@@ -375,9 +374,9 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
         }
     }
     for ((name, set) in f) {
-        val x = set.toMutableSet()
+        val x = set
         val r = (x + name).toMutableSet()
-        val uf = list(f, frn, name, x, r)
+        val uf = list(f, frn, x, r)
         frn[name] = uf
     }
     return frn
