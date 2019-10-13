@@ -22,9 +22,10 @@ fun list(
     name: String,
     set: MutableSet<String>
 ): Set<String> {
+    val im = mutableSetOf<String>()
     for (i in set) {
-        if (frn.containsKey(i)) return set + (frn.getValue(i) - name)
-        if (friends.containsKey(i)) {
+        if (frn.containsKey(i)) im.addAll(set + (frn.getValue(i) - name))
+        else if (friends.containsKey(i)) {
             val y = friends.getValue(i).toMutableList()
             y.remove(name)
             y.removeAll(set)
@@ -34,7 +35,7 @@ fun list(
             }
         }
     }
-    return set
+    return if (im.size == 0) set else set + im
 }
 
 fun mean(list: List<Double>): Double = when (list.size) {
@@ -451,7 +452,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     }
     for (n in 1..treasures.size) {
         for (cw in 1..capacity) {
-            if (cw >= w[n]) ob[n][cw] = max(ob[n - 1][cw], ob[n - 1][capacity - w[n]] + c[n])
+            if (cw >= w[n]) ob[n][cw] = max(ob[n - 1][cw], ob[n - 1][cw - w[n]] + c[n])
             else ob[n][cw] = ob[n - 1][cw]
         }
     }
