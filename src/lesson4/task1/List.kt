@@ -19,8 +19,7 @@ fun rus(n: Int, s: Int): List<String> {
     val n3 = n / 100
     var w1 = ""
     var w2 = ""
-    var w3 = ""
-    w3 = when (n3) {
+    val w3 = when (n3) {
         1 -> "сто"
         2 -> "двести"
         3 -> "триста"
@@ -350,8 +349,8 @@ fun decimalFromString(str: String, base: Int): Int = decimal(str.map {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    val rl = listOf<String>("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
-    val al = listOf<Int>(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    val rl = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    val al = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
     var ans = ""
     var number = n
     for (i in al.indices) {

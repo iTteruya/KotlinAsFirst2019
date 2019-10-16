@@ -195,7 +195,19 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+
+    if (Regex("""[^\s\-%0123456789+]""").containsMatchIn(jumps) ||
+        !Regex("""[0123456789+]""").containsMatchIn(jumps) || jumps == ""
+    ) return -1
+    val regex = Regex("""\d+(?=\s\+)""").findAll(jumps)
+    val p = regex.map { it.value }.joinToString(separator = " ").split(" ")
+    var m = 0
+    for (i in p) {
+        if (i.toInt() > m) m = i.toInt()
+    }
+    return m
+}
 
 /**
  * Сложная
@@ -206,7 +218,20 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    if (Regex("""[^\d+\-\s]|\d+(?=\s+\d|\+-)""").containsMatchIn(expression)
+        || (Regex("""\+(?=\s+\+|\s+-)|-(?=\s+-|\s+\+)|\+(?=[+\-])|-(?=[-+])""")).containsMatchIn(expression)
+        || (!Regex("""^\d+""").containsMatchIn(expression)
+                || !Regex("""\d+$""").containsMatchIn(expression))
+    )
+        throw IllegalArgumentException("wrong format")
+    val p = Regex("""^\d+|(?<=\+\s)\d+""").findAll(expression)
+    val m = Regex("""(?<=-\s)\d+""").findAll(expression)
+    val plus = p.map { it.value }.joinToString(separator = " ").split(" ")
+    val minus = m.map { it.value }.joinToString(separator = " ").split(" ")
+    if (minus == listOf("")) return plus.fold(0, { sum, i -> sum + i.toInt() })
+    return plus.fold(0, { sum, i -> sum + i.toInt() }) - minus.fold(0, { sum, i -> sum + i.toInt() })
+}
 
 /**
  * Сложная
