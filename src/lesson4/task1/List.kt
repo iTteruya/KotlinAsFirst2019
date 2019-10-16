@@ -350,76 +350,17 @@ fun decimalFromString(str: String, base: Int): Int = decimal(str.map {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    var vn = n
-    val l = mutableListOf<String>()
-    if (vn / 1000 >= 1) {
-        for (i in 1..vn / 1000) l.add("M")
-        vn %= 1000
-    }
-    if (vn / 100 >= 1) {
-        var c = vn / 100
-        while (c > 0) {
-            when (c) {
-                in 1..3 -> l.add("C")
-                4 -> {
-                    l.add("CD")
-                    c -= 3
-                }
-                in 5..8 -> {
-                    l.add("D")
-                    c -= 4
-                }
-                else -> {
-                    l.add("CM")
-                    c -= 8
-                }
-            }
-            c--
+    val rl = listOf<String>("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    val al = listOf<Int>(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    var ans = ""
+    var number = n
+    for (i in al.indices) {
+        while (number - al[i] >= 0) {
+            ans += rl[i]
+            number -= al[i]
         }
-        vn %= 100
     }
-    if (vn / 10 >= 1) {
-        var c = vn / 10
-        while (c > 0) {
-            when (c) {
-                in 1..3 -> l.add("X")
-                4 -> {
-                    l.add("XL")
-                    c -= 3
-                }
-                in 5..8 -> {
-                    l.add("L")
-                    c -= 4
-                }
-                else -> {
-                    l.add("XC")
-                    c -= 8
-                }
-            }
-            c--
-        }
-        vn %= 10
-    }
-    var c = vn
-    while (c > 0) {
-        when (c) {
-            in 1..3 -> l.add("I")
-            4 -> {
-                l.add("IV")
-                c -= 3
-            }
-            in 5..8 -> {
-                l.add("V")
-                c -= 4
-            }
-            else -> {
-                l.add("IX")
-                c -= 8
-            }
-        }
-        c--
-    }
-    return l.joinToString(separator = "")
+    return ans
 }
 
 /**
