@@ -242,7 +242,15 @@ fun plusMinus(expression: String): Int {
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    val ex = str.toLowerCase()
+    val w = str.split(" ")
+    for (word in w) {
+        if (Regex("""$word(?=\s$word)""").containsMatchIn(ex))
+            return Regex("""$word(?=\s$word)""").find(ex)!!.range.first
+    }
+    return -1
+}
 
 /**
  * Сложная
@@ -255,7 +263,28 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    val list = description.split("; ")
+    val m = mutableMapOf<String, Double>()
+    try {
+        for (item in list) {
+            val i = item.split(" ")
+            if (i[1].toDouble() < 0) return ""
+            m[i[0]] = i[1].toDouble()
+        }
+    } catch (e: Exception) {
+        return ""
+    }
+    var max = 0.0
+    var a = ""
+    for ((n, p) in m) {
+        if (p > max) {
+            max = p
+            a = n
+        }
+    }
+    return a
+}
 
 /**
  * Сложная
@@ -268,7 +297,22 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    var rom = roman
+    var arabic = 0
+    val rl = listOf("CM", "M", "CD", "D", "XC", "C", "XL", "L", "IX", "X", "IV", "V", "I")
+    val al = listOf(900, 1000, 400, 500, 90, 100, 40, 50, 9, 10, 4, 5, 1)
+    if (Regex("""[^MCDXLIV]""").containsMatchIn(roman)) return -1
+    for (i in rl.indices) {
+        val w = rl[i]
+        if (Regex(w).containsMatchIn(rom)) {
+            val p1 = Regex(w).findAll(rom)
+            arabic += al[i] * p1.map { it.value }.toList().size
+            rom = Regex(w).replace(rom, "")
+        }
+    }
+    if (arabic == 0) return -1 else return arabic
+}
 
 /**
  * Очень сложная
