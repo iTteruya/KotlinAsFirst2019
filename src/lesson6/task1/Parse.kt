@@ -243,6 +243,7 @@ fun plusMinus(expression: String): Int {
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int {
+    if (Regex("""[0123456789~!@#${'$'}%^&*+-]""").containsMatchIn(str)) return -1
     val ex = str.toLowerCase()
     val w = str.split(" ")
     for (word in w) {
@@ -278,7 +279,7 @@ fun mostExpensive(description: String): String {
     var max = 0.0
     var a = ""
     for ((n, p) in m) {
-        if (p > max) {
+        if (p >= max) {
             max = p
             a = n
         }
