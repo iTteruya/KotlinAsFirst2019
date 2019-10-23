@@ -2,6 +2,23 @@
 
 package lesson6.task1
 
+import java.lang.IllegalStateException
+import java.lang.IndexOutOfBoundsException
+
+fun skip(com: List<Char>, j: Int, c: String): Int {
+    var x = j + 1
+    var count = 0
+    if (com[x] == '[') {
+        while (com[x] == '[') {
+            x++
+            count++
+        }
+    }
+    val m = Regex("""]""").findAll(c, x)
+    val r = m.map { it.range }.toList()
+    return r[count].last
+}
+
 /**
  * Пример
  *
@@ -242,7 +259,7 @@ fun plusMinus(expression: String): Int {
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int {
+fun firstDuplicateIndex(str: String): Int { //safe
     val ex = str.toLowerCase()
     val w = ex.split(" ")
     for (word in w) {
@@ -311,7 +328,7 @@ fun fromRoman(roman: String): Int {
             rom = Regex(w).replace(rom, "")
         }
     }
-    if (arabic == 0) return -1 else return arabic
+    return if (arabic == 0) -1 else arabic
 }
 
 /**
@@ -350,4 +367,55 @@ fun fromRoman(roman: String): Int {
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    var lim = limit
+    var i = cells / 2
+    val com = commands.toCharArray().toMutableList()
+    var j = 0
+    val hm = mutableListOf<Int>()
+    var cj = 0
+    val c = mutableListOf<Int>()
+    for (ii in 0 until cells) {
+        c.add(0)
+    }
+    if (Regex("""[^0123456789+\[\]\-\s><]""").containsMatchIn(commands))
+        throw IllegalArgumentException("wrong format")
+    val ex1 = Regex("""[^\[\]]""").replace(commands, "")
+    var ex2 = ex1
+    while (Regex("""\[(?=])|(?<=\[)]""").containsMatchIn(ex2)) {
+        val ex3 = Regex("""\[(?=])|(?<=\[)]""").replace(ex2, "")
+        ex2 = ex3
+    }
+    if (Regex("""[\[\]]""").containsMatchIn(ex2)) throw IllegalArgumentException("wrong format")
+    try {
+        while (lim > 0 && j < com.size && j >= 0) {
+            if (com[j] == '[' && c[i] == 0) {
+                cj = j
+                hm.add(cj)
+                j = skip(com, j, commands)
+            }
+            if (com[j] == '[' && c[i] != 0) {
+                cj = j
+                hm.add(cj)
+            }
+            if (com[j] == ']' && c[i] == 0) {
+                if (hm.isNotEmpty()) hm.remove(hm[hm.lastIndex])
+                if (hm.isNotEmpty()) cj = hm[hm.lastIndex]
+            }
+            if (com[j] == ']' && c[i] != 0) j = cj
+            when (com[j]) {
+                '+' -> c[i] += 1
+                '-' -> c[i] -= 1
+                '>' -> i += 1
+                '<' -> i -= 1
+            }
+            if (i < 0 || i > cells) throw IllegalStateException("error")
+            j++
+            lim--
+        }
+    } catch (e: IndexOutOfBoundsException) {
+        throw IllegalArgumentException("wrong format")
+    }
+    return c
+}
+
