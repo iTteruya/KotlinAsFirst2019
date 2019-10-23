@@ -5,18 +5,15 @@ package lesson6.task1
 import java.lang.IllegalStateException
 import java.lang.IndexOutOfBoundsException
 
-fun skip(com: List<Char>, j: Int, c: String): Int {
+fun skip(com: List<Char>, j: Int): Int {
     var x = j + 1
-    var count = 0
-    if (com[x] == '[') {
-        while (com[x] == '[') {
-            x++
-            count++
-        }
+    var count = 1
+    while (count > 0) {
+        if (com[x] == '[') count++
+        if (com[x] == ']') count--
+        x++
     }
-    val m = Regex("""]""").findAll(c, x)
-    val r = m.map { it.range }.toList()
-    return r[count].last
+    return x - 1
 }
 
 /**
@@ -260,14 +257,25 @@ fun plusMinus(expression: String): Int {
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int {
+    var ans = 0
     val ex = str.toLowerCase()
     val w = ex.split(" ")
     for (word in w) {
-        if (Regex("""\$word(?=\s\$word)""").containsMatchIn(ex))
+        if (Regex("""\$word(?=\s\$word)""").containsMatchIn(ex)) {
+            ans++
             return Regex("""\$word(?=\s\$word)""").find(ex)!!.range.first
+        }
+    }
+    if (ans == 0) {
+        for (word in w) {
+            if (Regex("""[$word](?=\s[$word])""").containsMatchIn(ex)) {
+                return Regex("""[$word](?=\s[$word])""").find(ex)!!.range.first
+            }
+        }
     }
     return -1
 }
+
 /**
  * Сложная
  *
@@ -391,7 +399,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
             if (com[j] == '[' && c[i] == 0) {
                 cj = j
                 hm.add(cj)
-                j = skip(com, j, commands)
+                j = skip(com, j)
             }
             if (com[j] == '[' && c[i] != 0) {
                 cj = j
