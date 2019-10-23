@@ -259,6 +259,7 @@ fun plusMinus(expression: String): Int {
 fun firstDuplicateIndex(str: String): Int {
     var ans = 0
     val ex = str.toLowerCase()
+    if (ex == "") return -1
     val w = ex.split(" ")
     for (word in w) {
         if (Regex("""\$word(?=\s\$word)""").containsMatchIn(ex)) {
