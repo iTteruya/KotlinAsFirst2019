@@ -408,7 +408,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                 '>' -> i += 1
                 '<' -> i -= 1
             }
-            if (i < 0 || i > cells) throw IllegalStateException("error")
+            if (i < 0 || i > cells - 1) throw IllegalStateException("error")
             j++
             lim--
         }
