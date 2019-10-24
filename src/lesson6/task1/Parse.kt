@@ -4,6 +4,7 @@ package lesson6.task1
 
 import java.lang.IllegalStateException
 import java.lang.IndexOutOfBoundsException
+import java.util.regex.PatternSyntaxException
 
 fun skip(com: List<Char>, j: Int): Int {
     var x = j + 1
@@ -257,30 +258,18 @@ fun plusMinus(expression: String): Int {
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int {
-    var ans = 0
+    if (Regex("""\[|]""").containsMatchIn(str)) return -1
     val ex = str.toLowerCase()
-    if (ex == "") return -1
     val w = ex.split(" ")
     try {
         for (word in w) {
-            if (Regex("""\$word(?=\s\$word)""").containsMatchIn(ex)) {
-                ans++
+            if (Regex("""\$word(?=\s\$word)""").containsMatchIn(ex))
                 return Regex("""\$word(?=\s\$word)""").find(ex)!!.range.first
-            }
         }
-    } catch (e: Exception) {
+    } catch (e: PatternSyntaxException) {
         for (word in w) {
-            if (Regex("""[$word](?=\s[$word])""").containsMatchIn(ex)) {
-                return Regex("""[$word](?=\s[$word])""").find(ex)!!.range.first
-            }
-        }
-        return -1
-    }
-    if (ans == 0) {
-        for (word in w) {
-            if (Regex("""[$word](?=\s[$word])""").containsMatchIn(ex)) {
-                return Regex("""[$word](?=\s[$word])""").find(ex)!!.range.first
-            }
+            if (Regex("""$word(?=\s$word)""").containsMatchIn(ex))
+                return Regex("""$word(?=\s$word)""").find(ex)!!.range.first
         }
     }
     return -1
