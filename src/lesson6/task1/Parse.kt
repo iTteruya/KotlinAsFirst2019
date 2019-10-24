@@ -263,10 +263,20 @@ fun firstDuplicateIndex(str: String): Int {
     val w = ex.split(" ")
     try {
         for (word in w) {
-            if (Regex("""$word(?=\s$word)""").containsMatchIn(ex))
-                return Regex("""$word(?=\s$word)""").find(ex)!!.range.first
             if (Regex("""\$word(?=\s\$word)""").containsMatchIn(ex))
                 return Regex("""\$word(?=\s\$word)""").find(ex)!!.range.first
+        }
+    } catch (e: PatternSyntaxException) {
+        for (word in w) {
+            if (Regex("""$word(?=\s$word)""").containsMatchIn(ex))
+                return Regex("""$word(?=\s$word)""").find(ex)!!.range.first
+        }
+        return -1
+    }
+    try {
+        for (word in w) {
+            if (Regex("""$word(?=\s$word)""").containsMatchIn(ex))
+                return Regex("""$word(?=\s$word)""").find(ex)!!.range.first
         }
     } catch (e: PatternSyntaxException) {
         for (word in w) {
