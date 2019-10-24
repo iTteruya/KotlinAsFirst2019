@@ -265,8 +265,10 @@ fun firstDuplicateIndex(str: String): Int {
         for (word in w) {
             if (Regex("""\$word(?=\s\$word)""").containsMatchIn(ex))
                 return Regex("""\$word(?=\s\$word)""").find(ex)!!.range.first
+            if (Regex("""[$word](?=\s[$word])""").containsMatchIn(ex))
+                return Regex("""[$word](?=\s[$word])""").find(ex)!!.range.first
         }
-    } catch (e: PatternSyntaxException) {
+    }catch (e: PatternSyntaxException) {
         for (word in w) {
             if (Regex("""$word(?=\s$word)""").containsMatchIn(ex))
                 return Regex("""$word(?=\s$word)""").find(ex)!!.range.first
