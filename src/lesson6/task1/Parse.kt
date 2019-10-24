@@ -273,6 +273,7 @@ fun firstDuplicateIndex(str: String): Int {
             if (Regex("""\$word(?=\s\$word)""").containsMatchIn(ex))
                 return Regex("""\$word(?=\s\$word)""").find(ex)!!.range.first
         }
+        return -1
     }
     return -1
 }
