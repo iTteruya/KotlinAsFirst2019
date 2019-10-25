@@ -268,7 +268,6 @@ fun firstDuplicateIndex(str: String): Int {
             if (Regex("""$word(?=\s$word)""").containsMatchIn(ex))
                 l.add(Regex("""$word(?=\s$word)""").find(ex)!!.range.first)
         }
-        if (l.isNotEmpty()) return l.min()!!
     }
     val exx = (Regex("""\w|[А-Яа-яё]""").replace(str, " "))
     val e2 = Regex("""\s(?=\s+)|^\s|\s$""").replace(exx, "").trim()
@@ -278,8 +277,8 @@ fun firstDuplicateIndex(str: String): Int {
             if (Regex("""\$i(?=\s\$i)""").containsMatchIn(exx))
                 l.add(Regex("""\$i(?=\s\$i)""").find(exx)!!.range.first)
         }
-        if (l.isNotEmpty()) return l.min()!!
     }
+    if (l.isNotEmpty()) return l.min()!!
     return -1
 }
 
