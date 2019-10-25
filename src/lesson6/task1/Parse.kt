@@ -260,7 +260,7 @@ fun plusMinus(expression: String): Int {
 fun firstDuplicateIndex(str: String): Int {
     if (Regex("""\[|]""").containsMatchIn(str)) return -1
     val e = str.toLowerCase()
-    val ex = Regex("""[^А-Яа-я\w\s]""").replace(e, " ")
+    val ex = Regex("""[^А-Яа-я\w\sё]""").replace(e, " ")
     val e1 = Regex("""\s(?=\s+)|^\s|\s$""").replace(ex, "")
     val w = e1.split(" ")
     if (w.isNotEmpty()) {
@@ -269,8 +269,8 @@ fun firstDuplicateIndex(str: String): Int {
                 return Regex("""$word(?=\s$word)""").find(ex)!!.range.first
         }
     }
-    val exx = (Regex("""\w|[А-Яа-я]""").replace(str, " "))
-    val e2 = Regex("""\s(?=\s+)|^\s|\s$""").replace(ex, "")
+    val exx = (Regex("""\w|[А-Яа-яё]""").replace(str, " "))
+    val e2 = Regex("""\s(?=\s+)|^\s|\s$""").replace(exx, "")
     val s = e2.split(" ")
     if (s.isNotEmpty()) {
         for (i in s) {
