@@ -261,7 +261,7 @@ fun firstDuplicateIndex(str: String): Int {
     if (Regex("""\[|]""").containsMatchIn(str)) return -1
     val e = str.toLowerCase()
     val ex = Regex("""[^А-Яа-я\w\sё]""").replace(e, " ")
-    val e1 = Regex("""\s(?=\s+)|^\s|\s$""").replace(ex, "")
+    val e1 = Regex("""\s(?=\s+)|^\s|\s$""").replace(ex, "").trim()
     val w = e1.split(" ")
     if (w.isNotEmpty()) {
         for (word in w) {
@@ -270,7 +270,7 @@ fun firstDuplicateIndex(str: String): Int {
         }
     }
     val exx = (Regex("""\w|[А-Яа-яё]""").replace(str, " "))
-    val e2 = Regex("""\s(?=\s+)|^\s|\s$""").replace(exx, "")
+    val e2 = Regex("""\s(?=\s+)|^\s|\s$""").replace(exx, "").trim()
     val s = e2.split(" ")
     if (s.isNotEmpty()) {
         for (i in s) {
