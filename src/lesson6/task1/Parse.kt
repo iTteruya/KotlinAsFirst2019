@@ -259,23 +259,26 @@ fun plusMinus(expression: String): Int {
  */
 fun firstDuplicateIndex(str: String): Int {
     val e = str.toLowerCase()
+    val l = mutableListOf<Int>()
     val ex = Regex("""[^А-Яа-я\w\sё]""").replace(e, " ")
     val e1 = Regex("""\s(?=\s+)|^\s|\s$""").replace(ex, "").trim()
     if (e1 != "") {
-        val w = e1.split(" ")
+        val w = e1.split(" ").toSet()
         for (word in w) {
             if (Regex("""$word(?=\s$word)""").containsMatchIn(ex))
-                return Regex("""$word(?=\s$word)""").find(ex)!!.range.first
+                l.add(Regex("""$word(?=\s$word)""").find(ex)!!.range.first)
         }
+        if (l.isNotEmpty()) return l.min()!!
     }
     val exx = (Regex("""\w|[А-Яа-яё]""").replace(str, " "))
     val e2 = Regex("""\s(?=\s+)|^\s|\s$""").replace(exx, "").trim()
     if (e2 != "") {
-        val s = e2.split(" ")
+        val s = e2.split(" ").toSet()
         for (i in s) {
             if (Regex("""\$i(?=\s\$i)""").containsMatchIn(exx))
-                return Regex("""\$i(?=\s\$i)""").find(exx)!!.range.first
+                l.add(Regex("""\$i(?=\s\$i)""").find(exx)!!.range.first)
         }
+        if (l.isNotEmpty()) return l.min()!!
     }
     return -1
 }
