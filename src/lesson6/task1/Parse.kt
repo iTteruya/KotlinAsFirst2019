@@ -279,7 +279,7 @@ fun firstDuplicateIndex(str: String): Int {
         }
     }
     return -1
-
+}
 
 /**
  * Сложная
