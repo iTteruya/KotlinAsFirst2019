@@ -259,21 +259,24 @@ fun plusMinus(expression: String): Int {
  */
 fun firstDuplicateIndex(str: String): Int {
     if (Regex("""\[|]""").containsMatchIn(str)) return -1
-    var ans = -1
     val e = str.toLowerCase()
-    val ex = Regex("""[^А-Яа-яё\w\s]""").replace(e, " ")
+    val ex = Regex("""[^А-Яа-я\w\s]""").replace(e, " ")
     val e1 = Regex("""\s(?=\s+)|^\s|\s$""").replace(ex, "")
     val w = e1.split(" ")
-    for (word in w) {
-        if (Regex("""$word(?=\s$word)""").containsMatchIn(ex))
-            return Regex("""$word(?=\s$word)""").find(ex)!!.range.first
+    if (w.isNotEmpty()) {
+        for (word in w) {
+            if (Regex("""$word(?=\s$word)""").containsMatchIn(ex))
+                return Regex("""$word(?=\s$word)""").find(ex)!!.range.first
+        }
     }
     val exx = (Regex("""\w|[А-Яа-я]""").replace(str, " "))
     val e2 = Regex("""\s(?=\s+)|^\s|\s$""").replace(ex, "")
     val s = e2.split(" ")
-    for (i in s) {
-        if (Regex("""\$i(?=\s\$i)""").containsMatchIn(exx))
-            return Regex("""\$i(?=\s\$i)""").find(exx)!!.range.first
+    if (s.isNotEmpty()) {
+        for (i in s) {
+            if (Regex("""\$i(?=\s\$i)""").containsMatchIn(exx))
+                return Regex("""\$i(?=\s\$i)""").find(exx)!!.range.first
+        }
     }
     return -1
 }
