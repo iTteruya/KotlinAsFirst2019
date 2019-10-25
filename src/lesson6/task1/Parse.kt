@@ -257,21 +257,23 @@ fun plusMinus(expression: String): Int {
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int { //переделать
+fun firstDuplicateIndex(str: String): Int {
     if (Regex("""\[|]""").containsMatchIn(str)) return -1
-    val ex = str.toLowerCase()
-    val w = ex.split(" ")
-    try {
-        for (word in w) {
-            if (Regex("""$word(?=\s$word)""").containsMatchIn(ex))
-                return Regex("""$word(?=\s$word)""").find(ex)!!.range.first
-        }
-    } catch (e: PatternSyntaxException) {
-        for (word in w) {
-            if (Regex("""\$word(?=\s\$word)""").containsMatchIn(ex))
-                return Regex("""\$word(?=\s\$word)""").find(ex)!!.range.first
-        }
-        return -1
+    var ans = -1
+    val e = str.toLowerCase()
+    val ex = Regex("""[^А-Яа-я\w\s]""").replace(e, " ")
+    val e1 = Regex("""\s(?=\s+)""").replace(ex, "")
+    val w = e1.split(" ")
+    for (word in w) {
+        if (Regex("""$word(?=\s$word)""").containsMatchIn(ex))
+            return Regex("""$word(?=\s$word)""").find(ex)!!.range.first
+    }
+    val exx = (Regex("""\w|[А-Яа-я]""").replace(str, " "))
+    val e2 = Regex("""\s(?=\s+)""").replace(ex, "")
+    val s = e2.split(" ")
+    for (i in s) {
+        if (Regex("""\$i(?=\s\$i)""").containsMatchIn(exx))
+            return Regex("""\$i(?=\s\$i)""").find(exx)!!.range.first
     }
     return -1
 }
