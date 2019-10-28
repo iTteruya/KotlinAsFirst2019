@@ -93,15 +93,13 @@ fun sibilants(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
         for (line in File(inputName).readLines()) {
             var s1 = line
-            if (Regex("""(?<=[ЖжШш])Ы|ы""").containsMatchIn(s1)) {
-                s1 = Regex("""(?<=[ЖжШш])Ы""").replace(s1, "И")
-                s1 = Regex("""(?<=[ЖжШш])ы""").replace(s1, "и")
-            }
-            if (Regex("""(?<=[ЖжШшЧчЩщ])Я|я|Ю|ю""").containsMatchIn(s1)) {
+            if (Regex("""(?<=[ЖжШшЧчЩщ])Я|я|Ю|ю|Ы|ы""").containsMatchIn(s1)) {
                 s1 = Regex("""(?<=[ЖжШшЧчЩщ])Я""").replace(s1, "А")
                 s1 = Regex("""(?<=[ЖжШшЧчЩщ])я""").replace(s1, "а")
                 s1 = Regex("""(?<=[ЖжШшЧчЩщ])Ю""").replace(s1, "У")
                 s1 = Regex("""(?<=[ЖжШшЧчЩщ])ю""").replace(s1, "у")
+                s1 = Regex("""(?<=[ЖжШшЧчЩщ])Ы""").replace(s1, "И")
+                s1 = Regex("""(?<=[ЖжШшЧчЩщ])ы""").replace(s1, "и")
             }
             it.write(s1)
             it.newLine()
