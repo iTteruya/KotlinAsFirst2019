@@ -192,11 +192,7 @@ fun bestLongJump(jumps: String): Int {
         !Regex("""[0123456789]""").containsMatchIn(jumps)
     ) return -1
     val p = Regex("""\s(?=\s+|%|-)|\s$|[%-]""").replace(jumps, "").split(" ")
-    var m = 0
-    for (i in p) {
-        if (i.toInt() > m) m = i.toInt()
-    }
-    return m
+    return p.map { it.toInt() }.max()!!
 }
 
 /**
@@ -217,11 +213,7 @@ fun bestHighJump(jumps: String): Int {
     ) return -1
     val regex = Regex("""\d+(?=\s\+)""").findAll(jumps)
     val p = regex.map { it.value }.joinToString(separator = " ").split(" ")
-    var m = 0
-    for (i in p) {
-        if (i.toInt() > m) m = i.toInt()
-    }
-    return m
+    return p.map { it.toInt() }.max()!!
 }
 
 /**
@@ -305,15 +297,7 @@ fun mostExpensive(description: String): String {
     } catch (e: Exception) {
         return ""
     }
-    var max = 0.0
-    var a = ""
-    for ((n, p) in m) {
-        if (p >= max) {
-            max = p
-            a = n
-        }
-    }
-    return a
+    return m.maxBy { it.value }!!.key
 }
 
 /**

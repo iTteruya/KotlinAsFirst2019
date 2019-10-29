@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import java.io.File
+import java.lang.StringBuilder
 
 /**
  * Пример
@@ -125,7 +126,20 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    var max = 0
+    for (line in File(inputName).readLines()) {
+        if (line.trim().length > max) max = line.trim().length
+    }
+    File(outputName).bufferedWriter().use {
+        for (line in File(inputName).readLines()) {
+            val cl = StringBuilder()
+            val s = (max - line.trim().length) / 2
+            for (i in 0 until s) cl.append(" ")
+            cl.append(line.trim())
+            it.write(cl.toString())
+            it.newLine()
+        }
+    }
 }
 
 /**
