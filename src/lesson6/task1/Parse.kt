@@ -172,10 +172,10 @@ fun dateDigitToStr(digital: String): String {
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String {
-    if (Regex("""[a-zA-z~!@#${'$'}%^&*]|\((?!\d)|\+(?!\d)""").containsMatchIn(phone)) return ""
-    return Regex("""[^0123456789+]""").replace(phone, "")
-}
+fun flattenPhoneNumber(phone: String): String =
+    if (Regex("""[a-zA-z~!@#${'$'}%^&*]|\((?!\d)|\+(?!\d)""").containsMatchIn(phone)) ""
+    else Regex("""[^0123456789+]""").replace(phone, "")
+
 
 /**
  * Средняя
@@ -367,14 +367,11 @@ fun fromRoman(roman: String): Int {
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var lim = limit
     var i = cells / 2
-    val com = commands.toCharArray().toMutableList()
+    val com = commands.toMutableList()
     var j = 0
     val hm = mutableListOf<Int>()
     var cj = 0
-    val c = mutableListOf<Int>()
-    for (ii in 0 until cells) {
-        c.add(0)
-    }
+    val c = MutableList(cells) { 0 }
     if (Regex("""[^0123456789+\[\]\-\s><]""").containsMatchIn(commands))
         throw IllegalArgumentException("wrong format")
     val ex1 = Regex("""[^\[\]]""").replace(commands, "")

@@ -2,7 +2,9 @@
 
 package lesson5.task1
 
+import lesson4.task1.mean
 import ru.spbstu.wheels.sorted
+import java.lang.StringBuilder
 import kotlin.math.max
 
 
@@ -36,11 +38,6 @@ fun list(
         }
     }
     return im
-}
-
-fun mean(list: List<Double>): Double = when (list.size) {
-    0 -> 0.0
-    else -> list.sum() / list.size
 }
 
 /**
@@ -133,13 +130,10 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    val gl = mutableMapOf<Int, List<String>>()
-    for ((_, g) in grades) {
-        val l = mutableListOf<String>()
-        for ((name, grade) in grades) {
-            if (g == grade) l.add(name)
-        }
-        if (l.size != 0) gl[g] = l
+    val gl = mutableMapOf<Int, MutableList<String>>()
+    for ((name, grade) in grades) {
+        if (gl.containsKey(grade)) gl[grade]!!.add(name)
+        else gl[grade] = mutableListOf(name)
     }
     return gl
 }
@@ -206,17 +200,10 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().int
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val a = mapA.toMutableMap()
-    val l = mutableListOf<String>()
-    for ((on, ov) in mapB) {
-        if (!a.containsKey(on)) a[on] = ov
-    }
-    for ((name, v) in a) {
-        l.add(v)
-        for ((n2, k) in mapB) {
-            if (name == n2 && a[n2] != mapB[n2]) l.add(k)
-        }
-        a[name] = l.joinToString(separator = ", ")
-        l.clear()
+    for ((name, number) in mapB) {
+        if (a.containsKey(name) && a[name] != mapB[name])
+            a[name] = StringBuilder().append(a[name]).append(", ").append(number).toString()
+        else a[name] = number
     }
     return a
 }
@@ -232,18 +219,12 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    val m = mutableMapOf<String, Double>()
-    for ((mp) in stockPrices) {
-        if (!m.containsKey(mp)) {
-            val l = mutableListOf<Double>()
-            for ((first, second) in stockPrices) {
-                if (first == mp) l.add(second)
-            }
-            val n = mean(l)
-            m[mp] = n
-        }
+    val m = mutableMapOf<String, MutableList<Double>>()
+    for (mp in stockPrices) {
+        if (m.containsKey(mp.first)) m[mp.first]!!.add(mp.second)
+        else m[mp.first] = mutableListOf(mp.second)
     }
-    return m
+    return m.mapValues { mean(it.value) }
 }
 
 /**
@@ -261,19 +242,9 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
-    var a = ""
-    var ex = 0
-    var mc = Double.MAX_VALUE
-    for ((n, c) in stuff) {
-        if (c.first == kind && c.second <= mc) {
-            mc = c.second
-            a = n
-            if (n == "") ex = 1
-        }
-    }
-    return if (a == "" && ex == 0) null else a
-}
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? =
+    stuff.filter { it.value.first == kind }.minBy { it.value.second }?.key
+
 
 /**
  * Средняя
@@ -284,14 +255,8 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    val s = chars.toSet().map { it.toLowerCase() }
-    val lw = word.toCharArray()
-    for (letter in lw) {
-        if (!s.contains(letter.toLowerCase())) return false
-    }
-    return true
-}
+fun canBuildFrom(chars: List<Char>, word: String): Boolean =
+    chars.map { it.toLowerCase() }.toSet() == word.toLowerCase().toSet()
 
 
 /**
@@ -307,16 +272,12 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
-    val s = list.toSet()
     val mp = mutableMapOf<String, Int>()
-    for (item in s) {
-        var n = 0
-        for (li in list) {
-            if (item == li) n++
-        }
-        if (n > 1) mp[item] = n
+    for (letter in list) {
+        if (mp.containsKey(letter)) mp[letter] = mp[letter]!! + 1
+        else mp[letter] = 1
     }
-    return mp
+    return mp.filter { it.value > 1 }
 }
 
 /**
@@ -329,14 +290,9 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    for (item in words) {
-        var count = 0
-        val l = item.toCharArray()
-        for (i in words) {
-            val s = i.toCharArray().toSet()
-            if (s == l.toSet() && (s.size == l.size || (l.size != l.toSet().size && l.toSet().size == s.size))) count++
-            if (count > 1) return true
-        }
+    val pa = words.groupBy { it.length }.filter { it.value.size > 1 }.values
+    for (i in pa) {
+        if (i.map { it.toSet() }.toSet().size < i.size) return true
     }
     return false
 }
@@ -374,9 +330,8 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
         }
     }
     for ((name, set) in f) {
-        val x = set
-        val r = (x + name).toMutableSet()
-        val uf = list(f, frn, x, r)
+        val r = (set + name).toMutableSet()
+        val uf = list(f, frn, set, r)
         frn[name] = uf
     }
     return frn
@@ -400,13 +355,11 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    val m = list.mapIndexed { i, it -> i to it }.toMap()
-    val map = m.toMutableMap()
-    for ((i, v) in m) {
-        map.remove(i)
-        val num = number - v
-        val mm = map.filterValues { it == num }
-        if (mm.isNotEmpty()) return Pair(mm.toList()[0].first, i).sorted()
+    val m = list.mapIndexed { i, it -> it to i }.toMap()
+    for (i in m) {
+        val num = number - i.key
+        if (m.containsKey(num) && m[num] != i.value)
+            return Pair(m[num]!!, i.value).sorted()
     }
     return Pair(-1, -1)
 }
