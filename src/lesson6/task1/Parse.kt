@@ -250,27 +250,16 @@ fun plusMinus(expression: String): Int {
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int {
-    val e = str.toLowerCase()
-    val l = mutableListOf<Int>()
-    val ex = Regex("""[^А-Яа-я\w\sё]""").replace(e, " ")
-    val e1 = Regex("""\s(?=\s+)|^\s|\s$""").replace(ex, "").trim()
-    if (e1 != "") {
-        val w = e1.split(" ").toSet()
-        for (word in w) {
-            if (Regex("""$word(?=\s$word)""").containsMatchIn(ex))
-                l.add(Regex("""$word(?=\s$word)""").find(ex)!!.range.first)
+    val words = str.toLowerCase().split(" ")
+    var index = 0
+    try {
+        for (i in words.indices) {
+            if (words[i] == words[i + 1]) return index
+            else index += words[i].length + 1
         }
+    } catch (e: IndexOutOfBoundsException) {
+        return -1
     }
-    val exx = (Regex("""\w|[А-Яа-яё]""").replace(str, " "))
-    val e2 = Regex("""\s(?=\s+)|^\s|\s$""").replace(exx, "").trim()
-    if (e2 != "") {
-        val s = e2.split(" ").toSet()
-        for (i in s) {
-            if (Regex("""\$i(?=\s\$i)""").containsMatchIn(exx))
-                l.add(Regex("""\$i(?=\s\$i)""").find(exx)!!.range.first)
-        }
-    }
-    if (l.isNotEmpty()) return l.min()!!
     return -1
 }
 
