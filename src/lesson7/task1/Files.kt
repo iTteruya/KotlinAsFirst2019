@@ -55,23 +55,21 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  *
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
-    val map = mutableMapOf<String, Int>()
-    for (word in substrings) {
-        val ml = mutableListOf<String>()
-        val lw = word.toLowerCase()
-        for (line in File(inputName).readLines()) {
+    val map = substrings.map { it to 0 }.toMap().toMutableMap()
+    for (line in File(inputName).readLines()) {
+        for (word in substrings) {
+            val lw = word.toLowerCase()
             var index = 0
             if (Regex("""\$lw""").containsMatchIn(line.toLowerCase())) {
                 var s1 = Regex("""\$lw""").find(line.toLowerCase(), index)
                 while (s1 != null) {
                     index = if (word.length > 1) s1.range.last + 1 - (word.length - 1)
                     else s1.range.last + 1
-                    ml.add(s1!!.value)
+                    map[word] = map[word]!! + 1
                     s1 = Regex("""\$lw""").find(line.toLowerCase(), index)
                 }
             }
         }
-        map[word] = ml.size
     }
     return map
 }
@@ -126,16 +124,14 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    var max = 0
-    for (line in File(inputName).readLines()) {
-        if (line.trim().length > max) max = line.trim().length
-    }
+    val text = File(inputName).readLines().map { it.trim() }
+    val max = text.maxBy { it.length }!!.length
     File(outputName).bufferedWriter().use {
-        for (line in File(inputName).readLines()) {
+        for (line in text) {
             val cl = StringBuilder()
-            val s = (max - line.trim().length) / 2
+            val s = (max - line.length) / 2
             for (i in 0 until s) cl.append(" ")
-            cl.append(line.trim())
+            cl.append(line)
             it.write(cl.toString())
             it.newLine()
         }
@@ -170,9 +166,36 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    val text = File(inputName).readLines().map { it.trim() }
+    val max = text.maxBy { it.length }!!.length
+    File(outputName).bufferedWriter().use {
+        for (line in text) {
+            var all = line.split(Regex("""\s+"""))
+            if (all.size == 1) {
+                it.write(line)
+                it.newLine()
+            } else {
+                val last = all[all.lastIndex]
+                val words = all.dropLast(1)
+                var lenght = Regex("""\s+""").replace(line, "").length
+                var nw = words.size
+                var s = (max - lenght) / nw
+                if (s * nw + lenght < max) s++
+                val ef = StringBuilder()
+                for (word in words) {
+                    ef.append(word)
+                    for (ii in 0 until s) ef.append(" ")
+                    lenght += s
+                    nw--
+                    if ((lenght + nw * s > max) && (lenght + nw * (s - 1) >= max)) s--
+                }
+                ef.append(last)
+                it.write(ef.toString())
+                it.newLine()
+            }
+        }
+    }
 }
-
 /**
  * Средняя
  *
