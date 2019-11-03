@@ -266,7 +266,26 @@ fun top20Words(inputName: String): Map<String, Int> {
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    TODO()
+    File(outputName).bufferedWriter().use {
+        val text = File(inputName).readLines()
+        for (line in text) {
+            var nl = line
+            for ((k, v) in dictionary) {
+                var key = k.toUpperCase()
+                var value = v.toLowerCase()
+                if (Regex("""$key""").containsMatchIn(nl)) {
+                    value = value.replaceFirst(v.first(), v.first().toUpperCase())
+                    nl = Regex("""$key""").replace(nl, "$value")
+                } else {
+                    key = k.toLowerCase()
+                    if (Regex("""$key""").containsMatchIn(nl))
+                        nl = Regex("""$key""").replace(nl, "$value")
+                }
+            }
+            it.write(nl)
+            it.newLine()
+        }
+    }
 }
 
 /**
@@ -294,7 +313,17 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
-    TODO()
+    File(outputName).bufferedWriter().use {
+        val list = mutableListOf<String>()
+        for (line in File(inputName).readLines()) {
+            val word = line.toLowerCase().toCharArray().toList()
+            if (word.toSet().size == word.size) list.add(line)
+        }
+        if (list.isEmpty()) it.write("") else
+            it.write(list.groupBy { i -> i.length }.toList().maxBy { ii -> ii.first }!!.second
+                .joinToString(separator = ", ")
+            )
+    }
 }
 
 /**
