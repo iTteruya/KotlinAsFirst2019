@@ -273,13 +273,13 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
             for ((k, v) in dictionary) {
                 var key = k.toUpperCase()
                 var value = v.toLowerCase()
-                if (Regex("""$key""").containsMatchIn(nl)) {
+                if (Regex("""\$key""").containsMatchIn(nl)) {
                     value = value.replaceFirst(v.first(), v.first().toUpperCase())
-                    nl = Regex("""$key""").replace(nl, "$value")
+                    nl = Regex("""\$key""").replace(nl, "$value")
                 } else {
                     key = k.toLowerCase()
-                    if (Regex("""$key""").containsMatchIn(nl))
-                        nl = Regex("""$key""").replace(nl, "$value")
+                    if (Regex("""\$key""").containsMatchIn(nl))
+                        nl = Regex("""\$key""").replace(nl, "$value")
                 }
             }
             it.write(nl)
