@@ -520,18 +520,20 @@ fun markdownToHtml(inputName: String, outputName: String) {
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
     File(outputName).bufferedWriter().use {
-        val l = lhv.toString().length + rhv.toString().length
         val text = StringBuilder()
         val ans = lhv * rhv
+        val l = ans.toString().length + 1
         var p = 0
         text.append(" ".repeat(l - lhv.toString().length) + "$lhv\n")
         text.append("*" + " ".repeat(l - (rhv.toString().length + 1)) + "$rhv\n")
         text.append("-".repeat(l) + "\n")
+        var space = l - ((lhv * rhv.toString().last().toString().toInt())).toString().length
         for (num in rhv.toString().reversed()) {
             val x = num.toString().toInt() * lhv
-            if (p > 0) text.append("+" + " ".repeat(l - (x.toString().length + p + 1)) + "$x\n")
-            else text.append(" ".repeat(l - x.toString().length) + "$x\n")
-            p++
+            if (p > 0) text.append("+" + " ".repeat(space -1) + "$x\n")
+            else text.append(" ".repeat(space) + "$x\n")
+            space--
+            p = 1
         }
         text.append("-".repeat(l) + "\n")
         text.append(" ".repeat(l - ans.toString().length) + "$ans")
