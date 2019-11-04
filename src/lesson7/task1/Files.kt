@@ -518,7 +518,7 @@ fun markdownToHtml(inputName: String, outputName: String) {
 2350
  *
  */
-fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
+fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) { //переделать
     File(outputName).bufferedWriter().use {
         val text = StringBuilder()
         val ans = lhv * rhv
