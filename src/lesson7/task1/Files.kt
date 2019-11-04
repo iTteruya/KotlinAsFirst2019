@@ -279,19 +279,15 @@ fun top20Words(inputName: String): Map<String, Int> {
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
     val map = dictionary.map { it.key.toLowerCase() to it.value.toLowerCase() }.toMap()
     File(outputName).bufferedWriter().use {
-        val text = File(inputName).readLines()
-        for (line in text) {
-            val nl = line
-            val fl = StringBuilder()
-            for (char in nl) {
-                if (map.containsKey(char.toLowerCase())) {
-                    if (char.isUpperCase()) fl.append((map[char.toLowerCase()] ?: error("")).capitalize())
-                    else fl.append(map[char.toLowerCase()])
-                } else fl.append(char)
-            }
-            it.write(fl.toString())
-            it.newLine()
+        val text = File(inputName).readText()
+        val fl = StringBuilder()
+        for (char in text) {
+            if (map.containsKey(char.toLowerCase())) {
+                if (char.isUpperCase()) fl.append((map[char.toLowerCase()] ?: error("")).capitalize())
+                else fl.append(map[char.toLowerCase()])
+            } else fl.append(char)
         }
+        it.write(fl.toString())
     }
 }
 
@@ -573,7 +569,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) { //додел�
         var res = take - div
         text.append("-$div" + " ".repeat((lhv.toString().length + 4) - (div.toString().length + 1)) + "$ans\n")
         text.append("-".repeat(div.toString().length + 1) + "\n")
-        text.append(" ".repeat(div.toString().length) + "$res")
+        text.append(" ".repeat(div.toString().length + 1 - res.toString().length) + "$res")
         if (lhv.toString().drop(res.toString().length) != "") {
             while (lhv.toString().drop(res.toString().length) != "") {
             }
