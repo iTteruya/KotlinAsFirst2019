@@ -2,6 +2,7 @@
 
 package lesson7.task1
 
+import com.sun.javafx.binding.StringFormatter
 import java.io.File
 import java.lang.StringBuilder
 
@@ -16,6 +17,16 @@ import java.lang.StringBuilder
  * Пустые строки во входном файле обозначают конец абзаца,
  * их следует сохранить и в выходном файле
  */
+
+fun devide(a: Int, b: Int): Int {
+    var f = a
+    while (f / b > 0) {
+        if ((f / 10) / b > 0) f /= 10
+        else break
+    }
+    return f
+}
+
 fun alignFile(inputName: String, lineLength: Int, outputName: String) {
     val outputStream = File(outputName).bufferedWriter()
     var currentLineLength = 0
@@ -266,23 +277,19 @@ fun top20Words(inputName: String): Map<String, Int> {
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
+    val map = dictionary.map { it.key.toLowerCase() to it.value.toLowerCase() }.toMap()
     File(outputName).bufferedWriter().use {
         val text = File(inputName).readLines()
         for (line in text) {
-            var nl = line
-            for ((k, v) in dictionary) {
-                var key = k.toUpperCase()
-                var value = v.toLowerCase()
-                if (Regex("""\$key""").containsMatchIn(nl)) {
-                    value = value.replaceFirst(v.first(), v.first().toUpperCase())
-                    nl = Regex("""\$key""").replace(nl, "$value")
-                } else {
-                    key = k.toLowerCase()
-                    if (Regex("""\$key""").containsMatchIn(nl))
-                        nl = Regex("""\$key""").replace(nl, "$value")
-                }
+            val nl = line
+            val fl = StringBuilder()
+            for (char in nl) {
+                if (map.containsKey(char.toLowerCase())) {
+                    if (char.isUpperCase()) fl.append((map[char.toLowerCase()] ?: error("")).capitalize())
+                    else fl.append(map[char.toLowerCase()])
+                } else fl.append(char)
             }
-            it.write(nl)
+            it.write(fl.toString())
             it.newLine()
         }
     }
@@ -516,9 +523,25 @@ fun markdownToHtml(inputName: String, outputName: String) {
  *
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    File(outputName).bufferedWriter().use {
+        val l = lhv.toString().length + rhv.toString().length
+        val text = StringBuilder()
+        val ans = lhv * rhv
+        var p = 0
+        text.append(" ".repeat(l - lhv.toString().length) + "$lhv\n")
+        text.append("*" + " ".repeat(l - (rhv.toString().length + 1)) + "$rhv\n")
+        text.append("-".repeat(l) + "\n")
+        for (num in rhv.toString().reversed()) {
+            val x = num.toString().toInt() * lhv
+            if (p > 0) text.append("+" + " ".repeat(l - (x.toString().length + p + 1)) + "$x\n")
+            else text.append(" ".repeat(l - x.toString().length) + "$x\n")
+            p++
+        }
+        text.append("-".repeat(l) + "\n")
+        text.append(" ".repeat(l - ans.toString().length) + "$ans")
+        it.write(text.toString())
+    }
 }
-
 
 /**
  * Сложная
@@ -540,7 +563,21 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  *
  */
-fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) { //доделать
+    File(outputName).bufferedWriter().use {
+        val text = StringBuilder()
+        val ans = lhv / rhv
+        text.append(" $lhv | $rhv\n")
+        var take = devide(lhv, rhv)
+        var div = (take / rhv) * rhv
+        var res = take - div
+        text.append("-$div" + " ".repeat((lhv.toString().length + 4) - (div.toString().length + 1)) + "$ans\n")
+        text.append("-".repeat(div.toString().length + 1) + "\n")
+        text.append(" ".repeat(div.toString().length) + "$res")
+        if (lhv.toString().drop(res.toString().length) != "") {
+            while (lhv.toString().drop(res.toString().length) != "") {
+            }
+        }
+    }
 }
 
