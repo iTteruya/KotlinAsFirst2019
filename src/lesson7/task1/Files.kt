@@ -518,7 +518,7 @@ fun markdownToHtml(inputName: String, outputName: String) {
 2350
  *
  */
-fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) { //переделать
+fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
     File(outputName).bufferedWriter().use {
         val text = StringBuilder()
         val ans = lhv * rhv
@@ -562,7 +562,7 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) { //пе�
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  *
  */
-fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) { //доделать
+fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     File(outputName).bufferedWriter().use {
         val text = StringBuilder()
         val ans = lhv / rhv
