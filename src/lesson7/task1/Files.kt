@@ -18,7 +18,7 @@ import java.lang.StringBuilder
  * их следует сохранить и в выходном файле
  */
 
-fun devide(a: Int, b: Int): Int {
+fun divide(a: Int, b: Int): Int {
     var f = a
     while (f / b > 0) {
         if ((f / 10) / b > 0) f /= 10
@@ -566,7 +566,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     File(outputName).bufferedWriter().use {
         val text = StringBuilder()
         val ans = lhv / rhv
-        var take = devide(lhv, rhv)
+        var take = divide(lhv, rhv)
         var div = (take / rhv) * rhv
         var res = take - div
         if (take.toString().length > div.toString().length) text.append("$lhv | $rhv\n")
