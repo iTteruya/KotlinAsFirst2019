@@ -530,9 +530,10 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) { //пе�
         var space = l - ((lhv * rhv.toString().last().toString().toInt())).toString().length
         for (num in rhv.toString().reversed()) {
             val x = num.toString().toInt() * lhv
-            if (p > 0) text.append("+" + " ".repeat(space -1) + "$x\n")
+            if (p > 0) text.append("+" + " ".repeat(space - 1) + "$x\n")
             else text.append(" ".repeat(space) + "$x\n")
-            space--
+            if (x.toString().length == 1) space--
+            if (space > 1) space--
             p = 1
         }
         text.append("-".repeat(l) + "\n")
@@ -565,17 +566,45 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) { //додел�
     File(outputName).bufferedWriter().use {
         val text = StringBuilder()
         val ans = lhv / rhv
-        text.append(" $lhv | $rhv\n")
         var take = devide(lhv, rhv)
         var div = (take / rhv) * rhv
         var res = take - div
+        if (take.toString().length > div.toString().length) text.append("$lhv | $rhv\n")
+        else text.append(" $lhv | $rhv\n")
         text.append("-$div" + " ".repeat((lhv.toString().length + 4) - (div.toString().length + 1)) + "$ans\n")
         text.append("-".repeat(div.toString().length + 1) + "\n")
-        text.append(" ".repeat(div.toString().length + 1 - res.toString().length) + "$res")
+        text.append(" ".repeat(div.toString().length + 1 - res.toString().length))
+        var space = div.toString().length + 1 - res.toString().length
         if (lhv.toString().drop(res.toString().length) != "") {
-            while (lhv.toString().drop(res.toString().length) != "") {
+            var min = take.toString().length
+            while (min <= lhv.toString().length - 1) {
+                take = res * 10 + lhv.toString()[min].toString().toInt()
+                min++
+                var l = take.toString().length
+                if (res == 0) {
+                    text.append("0$take\n")
+                    l++
+                } else text.append("$take\n")
+                div = (take / rhv) * rhv
+                res = take - div
+                if (div.toString().length < l) {
+                    text.append(
+                        " ".repeat(space) + "-"
+                                + " ".repeat(l - div.toString().length - 1) + "$div\n"
+                    )
+                    text.append(" ".repeat(space) + "-".repeat(l) + "\n")
+                    space += (l - res.toString().length)
+                    text.append(" ".repeat(space))
+                } else {
+                    text.append(" ".repeat(space - 1) + "-$div\n")
+                    text.append(" ".repeat(space - 1) + "-".repeat(l + 1) + "\n")
+                    space += (l - res.toString().length)
+                    text.append(" ".repeat(space))
+                }
             }
-        }
+            text.append("$res")
+        } else text.append("$res")
+        it.write(text.toString())
     }
 }
 
