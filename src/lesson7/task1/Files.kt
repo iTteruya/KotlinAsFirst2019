@@ -571,29 +571,23 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         val text = StringBuilder()
         val ans = lhv / rhv
         var take = divide(lhv, rhv)
-        var p = 0
         var div = (take / rhv) * rhv
         var res = take - div
-        if (take.toString().length > div.toString().length) {
+        var space: Int
+        space = if (take.toString().length > div.toString().length) {
             text.append("$lhv | $rhv\n")
             text.append(
                 " ".repeat(take.toString().length - 1 - div.toString().length) + "-$div"
-                        + " ".repeat(lhv.toString().length - take.toString().length + 3) + "$ans\n"
-            )
-            p = 1
-        } else {
-            text.append(" $lhv | $rhv\n")
-            text.append("-$div" + " ".repeat(lhv.toString().length - take.toString().length + 3) + "$ans\n")
-        }
-        var space = 0
-        space = if (p == 0) {
-            text.append("-".repeat(take.toString().length + 1) + "\n")
-            text.append(" ".repeat(take.toString().length + 1 - res.toString().length))
-            div.toString().length + 1 - res.toString().length
-        } else {
+                        + " ".repeat(lhv.toString().length - take.toString().length + 3) + "$ans\n")
             text.append("-".repeat(take.toString().length) + "\n")
             text.append(" ".repeat(take.toString().length - res.toString().length))
             div.toString().length - res.toString().length
+        } else {
+            text.append(" $lhv | $rhv\n")
+            text.append("-$div" + " ".repeat(lhv.toString().length - take.toString().length + 3) + "$ans\n")
+            text.append("-".repeat(take.toString().length + 1) + "\n")
+            text.append(" ".repeat(take.toString().length + 1 - res.toString().length))
+            div.toString().length + 1 - res.toString().length
         }
         if (lhv.toString().drop(res.toString().length) != "") {
             var min = take.toString().length
