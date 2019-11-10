@@ -532,8 +532,8 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
             val x = num.toString().toInt() * lhv
             if (p > 0) text.append("+" + " ".repeat(space - 1) + "$x\n")
             else text.append(" ".repeat(space) + "$x\n")
-            if (x.toString().length == 1) space--
-            if (space > 1) space--
+            if (x.toString().length == 1 && space > 1) space--
+            if (x.toString().length != 1 && space > 1) space--
             p = 1
         }
         text.append("-".repeat(l) + "\n")
@@ -589,8 +589,8 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                 res = take - div
                 if (div.toString().length < l) {
                     text.append(
-                        " ".repeat(space) + "-"
-                                + " ".repeat(l - div.toString().length - 1) + "$div\n"
+                        " ".repeat(space)
+                                + " ".repeat(l - div.toString().length - 1) + "-$div\n"
                     )
                     text.append(" ".repeat(space) + "-".repeat(l) + "\n")
                     space += (l - res.toString().length)
