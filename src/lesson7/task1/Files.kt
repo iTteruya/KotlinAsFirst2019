@@ -324,8 +324,8 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
         }
         if (list.isEmpty()) it.write("")
         else it.write(list.groupBy { i -> i.length }.toList().maxBy { ii -> ii.first }!!.second
-                .joinToString(separator = ", ")
-            )
+            .joinToString(separator = ", ")
+        )
     }
 }
 
@@ -523,18 +523,22 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
         val text = StringBuilder()
         val ans = lhv * rhv
         val l = ans.toString().length + 1
+        var cl = l
         var p = 0
         text.append(" ".repeat(l - lhv.toString().length) + "$lhv\n")
         text.append("*" + " ".repeat(l - (rhv.toString().length + 1)) + "$rhv\n")
         text.append("-".repeat(l) + "\n")
-        var space = l - ((lhv * rhv.toString().last().toString().toInt())).toString().length
         for (num in rhv.toString().reversed()) {
             val x = num.toString().toInt() * lhv
-            if (p > 0) text.append("+" + " ".repeat(space - 1) + "$x\n")
-            else text.append(" ".repeat(space) + "$x\n")
-            if (x.toString().length == 1 && space > 1) space--
-            if (x.toString().length != 1 && space > 1) space--
+            var space = cl - x.toString().length
+            if (space < 0) space = 0
+            if (p > 0) text.append("+" + " ".repeat(space) + "$x\n")
+            else {
+                text.append(" ".repeat(space) + "$x\n")
+                cl--
+            }
             p = 1
+            cl--
         }
         text.append("-".repeat(l) + "\n")
         text.append(" ".repeat(l - ans.toString().length) + "$ans")
@@ -569,9 +573,13 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         var take = divide(lhv, rhv)
         var div = (take / rhv) * rhv
         var res = take - div
-        if (take.toString().length > div.toString().length) text.append("$lhv | $rhv\n")
-        else text.append(" $lhv | $rhv\n")
-        text.append("-$div" + " ".repeat((lhv.toString().length + 4) - (div.toString().length + 1)) + "$ans\n")
+        if (take.toString().length > div.toString().length) {
+            text.append("$lhv | $rhv\n")
+            text.append("-$div" + " ".repeat((lhv.toString().length + 3) - (div.toString().length + 1)) + "$ans\n")
+        } else {
+            text.append(" $lhv | $rhv\n")
+            text.append("-$div" + " ".repeat((lhv.toString().length + 4) - (div.toString().length + 1)) + "$ans\n")
+        }
         text.append("-".repeat(div.toString().length + 1) + "\n")
         text.append(" ".repeat(div.toString().length + 1 - res.toString().length))
         var space = div.toString().length + 1 - res.toString().length
