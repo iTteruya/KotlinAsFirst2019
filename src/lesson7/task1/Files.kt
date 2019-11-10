@@ -577,7 +577,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         if (take.toString().length > div.toString().length) {
             text.append("$lhv | $rhv\n")
             text.append(
-                " ".repeat(lhv.toString().length - 1 - div.toString().length) + "-$div"
+                " ".repeat(take.toString().length - 1 - div.toString().length) + "-$div"
                         + " ".repeat(lhv.toString().length - take.toString().length + 3) + "$ans\n"
             )
             p = 1
@@ -585,10 +585,16 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             text.append(" $lhv | $rhv\n")
             text.append("-$div" + " ".repeat(lhv.toString().length - take.toString().length + 3) + "$ans\n")
         }
-        if (p == 0) text.append("-".repeat(take.toString().length + 1) + "\n")
-        else text.append("-".repeat(take.toString().length) + "\n")
-        text.append(" ".repeat(take.toString().length + 1 - res.toString().length))
-        var space = div.toString().length + 1 - res.toString().length
+        var space = 0
+        space = if (p == 0) {
+            text.append("-".repeat(take.toString().length + 1) + "\n")
+            text.append(" ".repeat(take.toString().length + 1 - res.toString().length))
+            div.toString().length + 1 - res.toString().length
+        } else {
+            text.append("-".repeat(take.toString().length) + "\n")
+            text.append(" ".repeat(take.toString().length - res.toString().length))
+            div.toString().length - res.toString().length
+        }
         if (lhv.toString().drop(res.toString().length) != "") {
             var min = take.toString().length
             while (min <= lhv.toString().length - 1) {
