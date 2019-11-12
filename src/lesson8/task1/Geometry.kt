@@ -5,6 +5,24 @@ package lesson8.task1
 import lesson1.task1.sqr
 import kotlin.math.*
 
+fun circleByPoint(points: List<Point>, obp: Point): Circle {
+var newCircle = circleByDiameter(Segment(points[0], obp))
+    val np = mutableListOf<Point>()
+    np.add(points[0])
+    for (i in 1 until points.size) {
+        if (!newCircle.contains(points[i])) newCircle = circleByTwoPoints(np, points[i], obp)
+        np.add(points[i])
+    }
+return newCircle
+}
+
+fun circleByTwoPoints(points: List<Point>, obp1: Point, obp2: Point): Circle {
+    var finalCircle = circleByDiameter(Segment(obp1, obp2))
+    for (p in points) {
+if (!finalCircle.contains(p)) finalCircle = circleByThreePoints(p, obp1, obp2)
+    }
+    return finalCircle
+}
 /**
  * Точка на плоскости
  */
@@ -245,5 +263,17 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
  * три точки данного множества, либо иметь своим диаметром отрезок,
  * соединяющий две самые удалённые точки в данном множестве.
  */
-fun minContainingCircle(vararg points: Point): Circle = TODO()
+fun minContainingCircle(vararg points: Point): Circle {
+    require(points.isNotEmpty())
+    if (points.size == 1) return Circle(points[0], 0.0)
+    val cp = mutableListOf<Point>()
+    var currentCircle = circleByDiameter(Segment(points[0], points[1]))
+    cp.add(points[0])
+    cp.add(points[1])
+    for (i in 2 until points.size) {
+        if (!currentCircle.contains(points[i])) currentCircle = circleByPoint(cp, points[i])
+        cp.add(points[i])
+    }
+    return currentCircle
+}
 
