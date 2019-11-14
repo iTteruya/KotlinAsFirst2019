@@ -77,6 +77,7 @@ fun square(notation: String): Square {
  * Ладья может пройти через клетку (3, 3) или через клетку (6, 1) к клетке (6, 3).
  */
 fun rookMoveNumber(start: Square, end: Square): Int {
+    require(start.inside() && end.inside())
     if (start == end) return 0
     return if (start.column == end.column || start.row == end.row) 1
     else 2
@@ -98,6 +99,7 @@ fun rookMoveNumber(start: Square, end: Square): Int {
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
 fun rookTrajectory(start: Square, end: Square): List<Square> {
+    require(start.inside() && end.inside())
     if (start == end) return listOf(start)
     return if (start.column == end.column || start.row == end.row) listOf(start, end)
     else listOf(start, Square(start.column, end.row), end)
@@ -127,6 +129,7 @@ fun rookTrajectory(start: Square, end: Square): List<Square> {
  * Слон может пройти через клетку (6, 4) к клетке (3, 7).
  */
 fun bishopMoveNumber(start: Square, end: Square): Int {
+    require(start.inside() && end.inside())
     if (start == end) return 0
     if ((start.row + start.column) % 2 != (end.row + end.column) % 2) return -1
     return if ((start.row - start.column) == (end.row - end.column)
@@ -200,6 +203,7 @@ fun kingMoveNumber(start: Square, end: Square): Int = kingTrajectory(start, end)
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
 fun kingTrajectory(start: Square, end: Square): List<Square> {
+    require(start.inside() && end.inside())
     if (start == end) return listOf(start)
     val sq = mutableListOf(start)
     var mv = start
