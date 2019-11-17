@@ -306,10 +306,12 @@ fun fromRoman(roman: String): Int {
     val rl = listOf("CM", "M", "CD", "D", "XC", "C", "XL", "L", "IX", "X", "IV", "V", "I")
     val al = listOf(900, 1000, 400, 500, 90, 100, 40, 50, 9, 10, 4, 5, 1)
     if (Regex("""[^MCDXLIV]""").containsMatchIn(roman)) return -1
+    if (Regex("""XM|LM|IM|VM|DM|XD|VD|ID|LD|LC|VC|IC|VL|IL|VX""").containsMatchIn(roman)) return -1
     for (i in rl.indices) {
         val w = rl[i]
         if (Regex(w).containsMatchIn(rom)) {
             val p1 = Regex(w).findAll(rom)
+            if (p1.map { it.value }.toList().size > 3) return -1
             arabic += al[i] * p1.map { it.value }.toList().size
             rom = Regex(w).replace(rom, "")
         }

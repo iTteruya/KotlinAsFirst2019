@@ -2,6 +2,9 @@
 
 package lesson8.task1
 
+import java.lang.Math.abs
+import java.lang.Math.max
+
 /**
  * Точка (гекс) на шестиугольной сетке.
  * Координаты заданы как в примере (первая цифра - y, вторая цифра - x)
@@ -36,7 +39,7 @@ data class HexPoint(val x: Int, val y: Int) {
      * Расстояние вычисляется как число единичных отрезков в пути между двумя гексами.
      * Например, путь межу гексами 16 и 41 (см. выше) может проходить через 25, 34, 43 и 42 и имеет длину 5.
      */
-    fun distance(other: HexPoint): Int = TODO()
+    fun distance(other: HexPoint): Int = (abs(y - other.y) + abs(x - other.x) + abs(x + y - (other.x + other.y))) / 2
 
     override fun toString(): String = "$y.$x"
 }
@@ -59,7 +62,7 @@ data class Hexagon(val center: HexPoint, val radius: Int) {
      * и другим шестиугольником B с центром в 26 и радиуоом 2 равно 2
      * (расстояние между точками 32 и 24)
      */
-    fun distance(other: Hexagon): Int = TODO()
+    fun distance(other: Hexagon): Int = max(0, center.distance(other.center) - (radius + other.radius))
 
     /**
      * Тривиальная
