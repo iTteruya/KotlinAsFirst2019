@@ -581,7 +581,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                         + " ".repeat(lhv.toString().length - take.toString().length + 3) + "$ans\n")
             text.append("-".repeat(take.toString().length) + "\n")
             text.append(" ".repeat(take.toString().length - res.toString().length))
-            div.toString().length - res.toString().length
+            div.toString().length + 1 - res.toString().length
         } else {
             text.append(" $lhv | $rhv\n")
             text.append("-$div" + " ".repeat(lhv.toString().length - take.toString().length + 3) + "$ans\n")
