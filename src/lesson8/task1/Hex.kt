@@ -116,7 +116,7 @@ class HexSegment(val begin: HexPoint, val end: HexPoint) {
     fun isValid(): Boolean {
         if (begin == end) return false
         if (begin.x == end.x || begin.y == end.y) return true
-        return abs(begin.x - end.x) == abs(begin.y - end.y)
+        return (end.x - begin.x) == (begin.y - end.y)
     }
 
     /**
