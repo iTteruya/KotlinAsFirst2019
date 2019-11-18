@@ -69,7 +69,7 @@ data class Hexagon(val center: HexPoint, val radius: Int) {
      *
      * Вернуть true, если заданная точка находится внутри или на границе шестиугольника
      */
-    fun contains(point: HexPoint): Boolean = TODO()
+    fun contains(point: HexPoint): Boolean = center.distance(point) <= radius
 }
 
 /**

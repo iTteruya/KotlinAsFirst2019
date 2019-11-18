@@ -104,7 +104,7 @@ data class Circle(val center: Point, val radius: Double) {
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
 
-    fun contains(p: Point): Boolean = center.distance(p) <= radius
+    fun contains(p: Point): Boolean = center.distance(p) - radius <= 1e-5
 }
 
 /**
@@ -267,9 +267,9 @@ fun minContainingCircle(vararg points: Point): Circle {
     require(points.isNotEmpty())
     if (points.size == 1) return Circle(points[0], 0.0)
     val cp = mutableListOf<Point>()
-    var currentCircle = circleByDiameter(Segment(points[0], points[1]))
     cp.add(points[0])
     cp.add(points[1])
+    var currentCircle = circleByDiameter(Segment(points[0], points[1]))
     for (i in 2 until points.size) {
         if (!currentCircle.contains(points[i])) currentCircle = circleByPoint(cp, points[i])
         cp.add(points[i])
