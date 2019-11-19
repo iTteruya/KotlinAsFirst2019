@@ -23,6 +23,7 @@ fun circleByTwoPoints(points: List<Point>, obp1: Point, obp2: Point): Circle {
     }
     return finalCircle
 }
+
 /**
  * Точка на плоскости
  */
