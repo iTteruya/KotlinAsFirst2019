@@ -118,12 +118,14 @@ fun generateRectangles(height: Int, width: Int): Matrix<Int> {
         for (i in full until width - full) {
             mtrx[full, i] = e
         }
+        if (height == 1) break
         cr++
         if (e > height * width) break
         for (i in cr until height - full) {
             mtrx[i, width - full - 1] = e
         }
         cc--
+        if (height == 1) break
         if (e > height * width) break
         for (i in cc downTo full) {
             mtrx[height - full - 1, i] = e
@@ -154,6 +156,22 @@ fun generateRectangles(height: Int, width: Int): Matrix<Int> {
  */
 fun generateSnake(height: Int, width: Int): Matrix<Int> {
     val mtrx = createMatrix(height, width, 0)
+    if (width == 1) {
+        var x = 1
+        for (i in 0 until height) {
+            mtrx[i, 0] = x
+            x++
+        }
+        return mtrx
+    }
+    if (height == 1) {
+        var x = 1
+        for (i in 0 until width) {
+            mtrx[0, i] = x
+            x++
+        }
+        return mtrx
+    }
     var k = 1
     var r = 0
     while (r < width) {
