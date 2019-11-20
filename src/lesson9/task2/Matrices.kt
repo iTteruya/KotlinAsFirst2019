@@ -112,29 +112,34 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> {
 fun generateRectangles(height: Int, width: Int): Matrix<Int> {
     val mtrx = MatrixImpl(height, width, 0)
     var e = 1
+    var k = 1
     var full = 0
     var cr = 0
     var cc = width - 1
-    while (e <= height * width) {
+    while (k <= height * width) {
         for (i in full until width - full) {
             mtrx[full, i] = e
+            k++
         }
         if (height == 1) break
         cr++
-        if (e > height * width) break
+        if (k > height * width) break
         for (i in cr until height - full) {
             mtrx[i, width - full - 1] = e
+            k++
         }
         cc--
         if (width == 1) break
-        if (e > height * width) break
+        if (k > height * width) break
         for (i in cc downTo full) {
             mtrx[height - full - 1, i] = e
+            k++
         }
         full++
-        if (e > height * width) break
+        if (k > height * width) break
         for (i in height - 1 - full downTo full) {
             mtrx[i, full - 1] = e
+            k++
         }
         e++
     }
@@ -162,7 +167,7 @@ fun generateSnake(height: Int, width: Int): Matrix<Int> {
     while (r < width) {
         var cr = r
         var n = 0
-        while (cr >= 0 && n <= height) {
+        while (cr >= 0 && n <= height - 1) {
             mtrx[n, cr] = k
             k++
             cr--
