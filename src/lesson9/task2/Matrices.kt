@@ -2,6 +2,7 @@
 
 package lesson9.task2
 
+import lesson7.task1.markdownToHtml
 import lesson9.task1.Matrix
 import lesson9.task1.MatrixImpl
 import lesson9.task1.createMatrix
