@@ -133,7 +133,7 @@ fun generateRectangles(height: Int, width: Int): Matrix<Int> {
         if (k > height * width) break
         for (i in cc downTo full) {
             mtrx[height - full - 1, i] = e
-            k+
+            k++
         }
         full++
         if (k > height * width) break
