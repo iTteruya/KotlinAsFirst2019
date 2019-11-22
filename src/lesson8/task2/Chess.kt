@@ -239,7 +239,7 @@ fun kingTrajectory(start: Square, end: Square): List<Square> {
  * Пример: knightMoveNumber(Square(3, 1), Square(6, 3)) = 3.
  * Конь может последовательно пройти через клетки (5, 2) и (4, 4) к клетке (6, 3).
  */
-fun knightMoveNumber(start: Square, end: Square): Int = TODO()
+fun knightMoveNumber(start: Square, end: Square): Int = knightTrajectory(start, end).lastIndex
 
 /**
  * Очень сложная
@@ -261,4 +261,31 @@ fun knightMoveNumber(start: Square, end: Square): Int = TODO()
  *
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
-fun knightTrajectory(start: Square, end: Square): List<Square> = TODO()
+fun findPath(
+    c: Int, r: Int, ans: MutableList<Square>, check: MutableList<Square>, end: Square,
+    l: MutableList<List<Square>>
+): MutableList<List<Square>> {
+    var path = check
+    val moves = listOf(
+        Pair(1, 2), Pair(2, 1), Pair(1, -2), Pair(-2, 1),
+        Pair(-1, 2), Pair(2, -1), Pair(-1, -2), Pair(-2, -1)
+    )
+    if (Square(c, r).inside() && ans.size < 8) {
+        ans.add(Square(c, r))
+        if (Square(c, r) == end && ans.size < path.size) {
+            path = ans
+            l.add(path)
+        }
+        for (m in moves)
+            findPath(c + m.first, r + m.second, ans.toMutableList(), path.toMutableList(), end, l)
+    }
+    return l
+}
+
+fun knightTrajectory(start: Square, end: Square): List<Square> {
+    require(start.inside() && end.inside())
+    val minMoves = MutableList(8) { Square(0, 0) }
+    val x = findPath(start.column, start.row, mutableListOf(), minMoves, end, mutableListOf()).groupBy { it.size }
+    val min = x.getValue(x.keys.last())
+    return min[0]
+}
