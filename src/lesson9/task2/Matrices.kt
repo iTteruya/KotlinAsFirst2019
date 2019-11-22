@@ -3,9 +3,11 @@
 package lesson9.task2
 
 import lesson7.task1.markdownToHtml
+import lesson9.task1.Cell
 import lesson9.task1.Matrix
 import lesson9.task1.MatrixImpl
 import lesson9.task1.createMatrix
+import java.lang.IllegalStateException
 
 // Все задачи в этом файле требуют наличия реализации интерфейса "Матрица" в Matrix.kt
 
@@ -286,7 +288,21 @@ fun isLatinSquare(matrix: Matrix<Int>): Boolean =
  *
  * 42 ===> 0
  */
-fun sumNeighbours(matrix: Matrix<Int>): Matrix<Int> = TODO()
+fun sumNeighbours(matrix: Matrix<Int>): Matrix<Int> {
+    val mtrx = createMatrix(matrix.height, matrix.width, 0)
+    for (i in 0 until matrix.height) {
+        for (ii in 0 until matrix.width) {
+            mtrx[i, ii] =
+                matrix.getOrDefault(i + 1, ii, 0) + matrix.getOrDefault(i, ii + 1, 0) +
+                        matrix.getOrDefault(i - 1, ii, 0) + matrix.getOrDefault(i, ii - 1, 0) +
+                        matrix.getOrDefault(i + 1, ii + 1, 0) +
+                        matrix.getOrDefault(i - 1, ii - 1, 0) +
+                        matrix.getOrDefault(i + 1, ii - 1, 0) +
+                        matrix.getOrDefault(i - 1, ii + 1, 0)
+        }
+    }
+    return mtrx
+}
 
 /**
  * Средняя
@@ -342,7 +358,23 @@ data class Holes(val rows: List<Int>, val columns: List<Int>)
  *
  * К примеру, центральный элемент 12 = 1 + 2 + 4 + 5, элемент в левом нижнем углу 12 = 1 + 4 + 7 и так далее.
  */
-fun sumSubMatrix(matrix: Matrix<Int>): Matrix<Int> = TODO()
+fun sumSubMatrix(matrix: Matrix<Int>): Matrix<Int> {
+    val mtrx = createMatrix(matrix.height, matrix.width, 0)
+    for (i in 0 until matrix.height) {
+        for (ii in 0 until matrix.width) {
+            var ci = 0
+            while (ci <= i) {
+                var cii = 0
+                while (cii <= ii) {
+                    mtrx[i, ii] += matrix[ci, cii]
+                    cii++
+                }
+                ci++
+            }
+        }
+    }
+    return mtrx
+}
 
 /**
  * Сложная
@@ -364,7 +396,23 @@ fun sumSubMatrix(matrix: Matrix<Int>): Matrix<Int> = TODO()
  * Вернуть тройку (Triple) -- (да/нет, требуемый сдвиг по высоте, требуемый сдвиг по ширине).
  * Если наложение невозможно, то первый элемент тройки "нет" и сдвиги могут быть любыми.
  */
-fun canOpenLock(key: Matrix<Int>, lock: Matrix<Int>): Triple<Boolean, Int, Int> = TODO()
+fun canOpenLock(key: Matrix<Int>, lock: Matrix<Int>): Triple<Boolean, Int, Int> {
+    if (lock.width < key.width || lock.height < key.height) return Triple(false, 0, 0)
+    val k = lock.width - key.width
+    val m = lock.height - key.height
+    for (cm in 0..m) {
+        for (ck in 0..k) {
+            var ans = true
+            for (i in 0 until key.height) {
+                for (ii in 0 until key.width) {
+                    if (key[i, ii] == lock[i + cm, ii + ck]) ans = false
+                }
+            }
+            if (ans) return Triple(ans, cm, ck)
+        }
+    }
+    return Triple(false, 0, 0)
+}
 
 /**
  * Простая
@@ -389,7 +437,16 @@ operator fun Matrix<Int>.unaryMinus(): Matrix<Int> {
  * В противном случае бросить IllegalArgumentException.
  * Подробно про порядок умножения см. статью Википедии "Умножение матриц".
  */
-operator fun Matrix<Int>.times(other: Matrix<Int>): Matrix<Int> = TODO(this.toString())
+operator fun Matrix<Int>.times(other: Matrix<Int>): Matrix<Int> {
+    require(this.width == other.height)
+    val mtrx = createMatrix(this.height, other.width, 0)
+    for (i in 0 until mtrx.height) {
+        for (ii in 0 until mtrx.width) {
+            mtrx[i, ii] = lesson4.task1.times(gRow(i), other.gCom(ii))
+        }
+    }
+    return mtrx
+}
 
 /**
  * Сложная
@@ -418,7 +475,34 @@ operator fun Matrix<Int>.times(other: Matrix<Int>): Matrix<Int> = TODO(this.toSt
  * 0  4 13  6
  * 3 10 11  8
  */
-fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> = TODO()
+
+fun findValue(matrix: Matrix<Int>, value: Int): Pair<Int, Int> {
+    for (i in 0 until matrix.height) {
+        for (ii in 0 until matrix.width) {
+            if (matrix[i, ii] == value) return Pair(i, ii)
+        }
+    }
+    return Pair(-1, -1)
+}
+
+
+fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
+    var zero = Cell(findValue(matrix, 0).first, findValue(matrix, 0).second)
+    if (zero.row !in 0..15 || zero.column !in 0..15) throw IllegalStateException()
+    for (i in moves.indices) {
+        if (matrix.findNeighbour(zero.row, zero.column, moves[i], -1).first) {
+            val row = matrix.findNeighbour(zero.row, zero.column, moves[i], -1).second
+            val column = matrix.findNeighbour(zero.row, zero.column, moves[i], -1).third
+            if (row in 0..15 && column in 0..15 && matrix[row, column] in 1..15) {
+                matrix[zero.row, zero.column] = matrix[row, column].also {
+                    matrix[row, column] = matrix[zero.row, zero.column]
+                }
+                zero = Cell(row, column)
+            } else throw IllegalStateException()
+        } else throw IllegalStateException()
+    }
+    return matrix
+}
 
 /**
  * Очень сложная

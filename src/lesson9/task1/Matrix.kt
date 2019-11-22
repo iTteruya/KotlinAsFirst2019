@@ -2,6 +2,7 @@
 
 package lesson9.task1
 
+import java.lang.IllegalStateException
 import java.lang.StringBuilder
 
 /**
@@ -26,6 +27,35 @@ interface Matrix<E> {
     operator fun get(row: Int, column: Int): E
 
     operator fun get(cell: Cell): E
+
+    fun getOrDefault(row: Int, column: Int, def: E): E {
+        return if (row in 0 until height && column in 0 until width) get(row, column)
+        else def
+    }
+
+    fun findNeighbour(r: Int, c: Int, value: E, exc: E): Triple<Boolean, Int, Int> {
+        if (getOrDefault(r + 1, c, exc) == value) return Triple(true, r + 1, c)
+        if (getOrDefault(r, c + 1, exc) == value) return Triple(true, r, c + 1)
+        if (getOrDefault(r - 1, c, exc) == value) return Triple(true, r - 1, c)
+        if (getOrDefault(r, c - 1, exc) == value) return Triple(true, r, c - 1)
+        return Triple(false, -1, -1)
+    }
+
+    fun gRow(r: Int): List<E> {
+        val l = mutableListOf<E>()
+        for (i in 0 until width) {
+            l.add(get(r, i))
+        }
+return l
+    }
+
+    fun gCom(c: Int): List<E> {
+        val l = mutableListOf<E>()
+        for (i in 0 until height) {
+            l.add(get(i, c))
+        }
+        return l
+    }
 
     /**
      * Запись в ячейку.
