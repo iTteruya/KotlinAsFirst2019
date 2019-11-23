@@ -286,6 +286,6 @@ fun knightTrajectory(start: Square, end: Square): List<Square> {
     require(start.inside() && end.inside())
     val minMoves = MutableList(8) { Square(0, 0) }
     val x = findPath(start.column, start.row, mutableListOf(), minMoves, end, mutableListOf()).groupBy { it.size }
-    val min = x.getValue(x.keys.last())
+    val min = x.minBy { it.key }!!.value
     return min[0]
 }
