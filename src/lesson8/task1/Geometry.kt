@@ -253,6 +253,7 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
     val x = mab.crossPoint(mbc)
     return Circle(x, x.distance(a))
 }
+
 /**
  * Очень сложная
  *
