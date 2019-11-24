@@ -323,7 +323,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
             if (word.toSet().size == word.size) list.add(line)
         }
         if (list.isEmpty()) it.write("")
-        else it.write(list.groupBy { i -> i.length }.toList().maxBy { ii -> ii.first }!!.second
+        else it.write(list.groupBy { i -> i.length }.toList().maxBy { (first) -> first }!!.second
             .joinToString(separator = ", ")
         )
     }
@@ -578,7 +578,8 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             text.append("$lhv | $rhv\n")
             text.append(
                 " ".repeat(take.toString().length - 1 - div.toString().length) + "-$div"
-                        + " ".repeat(lhv.toString().length - take.toString().length + 3) + "$ans\n")
+                        + " ".repeat(lhv.toString().length - take.toString().length + 3) + "$ans\n"
+            )
             text.append("-".repeat(take.toString().length) + "\n")
             text.append(" ".repeat(take.toString().length - res.toString().length))
             div.toString().length + 1 - res.toString().length

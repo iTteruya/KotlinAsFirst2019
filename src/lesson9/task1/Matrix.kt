@@ -2,7 +2,6 @@
 
 package lesson9.task1
 
-import java.lang.IllegalStateException
 import java.lang.StringBuilder
 
 /**
@@ -46,7 +45,7 @@ interface Matrix<E> {
         for (i in 0 until width) {
             l.add(get(r, i))
         }
-return l
+        return l
     }
 
     fun gCom(c: Int): List<E> {
@@ -121,6 +120,13 @@ class MatrixImpl<E>(override val height: Int, override val width: Int, e: E) : M
         }
         text.append(this[height - 1, width - 1])
         return text.toString()
+    }
+
+    override fun hashCode(): Int {
+        var result = height
+        result = 31 * result + width
+        result = 31 * result + inf.hashCode()
+        return result
     }
 }
 

@@ -4,7 +4,6 @@ package lesson6.task1
 
 import java.lang.IllegalStateException
 import java.lang.IndexOutOfBoundsException
-import java.util.regex.PatternSyntaxException
 
 fun skip(com: List<Char>, j: Int): Int {
     var x = j + 1
