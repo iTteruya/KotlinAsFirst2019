@@ -404,7 +404,10 @@ fun canOpenLock(key: Matrix<Int>, lock: Matrix<Int>): Triple<Boolean, Int, Int> 
             var ans = true
             for (i in 0 until key.height) {
                 for (ii in 0 until key.width) {
-                    if (key[i, ii] == lock[i + cm, ii + ck]) ans = false
+                    if (key[i, ii] == lock[i + cm, ii + ck]) {
+                        ans = false
+                        break
+                    }
                 }
             }
             if (ans) return Triple(ans, cm, ck)
