@@ -463,8 +463,8 @@ fun findValue(matrix: Matrix<Int>, value: Int): Cell<Int, Int> {
         for (ii in 0 until matrix.width) {
             if (matrix[i, ii] == value) return Cell(i, ii)
         }
-}
-return Cell(-1, -1)
+    }
+    return Cell(-1, -1)
 }
 
 
