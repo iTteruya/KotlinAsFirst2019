@@ -100,16 +100,14 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  */
 fun sibilants(inputName: String, outputName: String) {
     val text = File(inputName).readLines()
+    val rplc = setOf(Pair("я", "а"), Pair("ю", "у"), Pair("ы", "и"))
     File(outputName).bufferedWriter().use {
         for (line in text) {
             var s1 = line
-            if (Regex("""(?<=[ЖжШшЧчЩщ])Я|я|Ю|ю|Ы|ы""").containsMatchIn(s1)) {
-                s1 = Regex("""(?<=[ЖжШшЧчЩщ])Я""").replace(s1, "А")
-                s1 = Regex("""(?<=[ЖжШшЧчЩщ])я""").replace(s1, "а")
-                s1 = Regex("""(?<=[ЖжШшЧчЩщ])Ю""").replace(s1, "У")
-                s1 = Regex("""(?<=[ЖжШшЧчЩщ])ю""").replace(s1, "у")
-                s1 = Regex("""(?<=[ЖжШшЧчЩщ])Ы""").replace(s1, "И")
-                s1 = Regex("""(?<=[ЖжШшЧчЩщ])ы""").replace(s1, "и")
+            for ((wrong, right) in rplc) {
+                val upwrong = wrong.toUpperCase()
+                s1 = Regex("""(?<=[ЖжШшЧчЩщ])$wrong""").replace(s1, right)
+                s1 = Regex("""(?<=[ЖжШшЧчЩщ])$upwrong""").replace(s1, right.toUpperCase())
             }
             it.write(s1)
             it.newLine()
@@ -137,12 +135,14 @@ fun sibilants(inputName: String, outputName: String) {
 fun centerFile(inputName: String, outputName: String) {
     val text = File(inputName).readLines().map { it.trim() }
     val max = text.maxBy { it.length }?.length
-    if (max == null)
+    if (max == null) {
         File(outputName).writeText("")
+        return
+    }
     File(outputName).bufferedWriter().use {
         for (line in text) {
             val cl = StringBuilder()
-            val s = (max!! - line.length) / 2
+            val s = (max - line.length) / 2
             for (i in 0 until s) cl.append(" ")
             cl.append(line)
             it.write(cl.toString())
@@ -181,8 +181,10 @@ fun centerFile(inputName: String, outputName: String) {
 fun alignFileByWidth(inputName: String, outputName: String) {
     val text = File(inputName).readLines().map { it.trim() }
     val max = text.maxBy { it.length }?.length
-    if (max == null)
+    if (max == null) {
         File(outputName).writeText("")
+        return
+    }
     File(outputName).bufferedWriter().use {
         for (line in text) {
             val all = line.split(Regex("""\s+"""))
@@ -192,20 +194,20 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             } else {
                 val last = all.last()
                 val words = all.dropLast(1)
-                var lenght = Regex("""\s+""").replace(line, "").length
+                var lngth = Regex("""\s+""").replace(line, "").length
                 var nw = words.size
-                var s = (max!! - lenght) / nw
-                if (s * nw + lenght < max) s++
-                val ef = StringBuilder()
+                var s = (max - lngth) / nw
+                if (s * nw + lngth < max) s++
+                val line = StringBuilder()
                 for (word in words) {
-                    ef.append(word)
-                    for (ii in 0 until s) ef.append(" ")
-                    lenght += s
+                    line.append(word)
+                    for (ii in 0 until s) line.append(" ")
+                    lngth += s
                     nw--
-                    if ((lenght + nw * s > max) && (lenght + nw * (s - 1) >= max)) s--
+                    if ((lngth + nw * s > max) && (lngth + nw * (s - 1) >= max)) s--
                 }
-                ef.append(last)
-                it.write(ef.toString())
+                line.append(last)
+                it.write(line.toString())
                 it.newLine()
             }
         }
