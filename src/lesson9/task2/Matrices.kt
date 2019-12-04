@@ -247,28 +247,8 @@ fun latinRows(matrix: Matrix<Int>): Boolean {
     return true
 }
 
-fun latinColumns(matrix: Matrix<Int>): Boolean {
-    val m = mutableListOf<MutableList<Int>>()
-    var x = matrix.height
-    for (i in 0 until matrix.width) {
-        val l = mutableListOf<Int>()
-        for (ii in 0 until matrix.height) {
-            l.add(matrix[ii, i])
-        }
-        m.add(l.sorted().toMutableList())
-    }
-    val set = m.toSet()
-    if (set.size > 1) return false
-    while (x > 0) {
-        if (x !in m[0]) return false
-        x--
-    }
-    return true
-}
-
 fun isLatinSquare(matrix: Matrix<Int>): Boolean =
-    matrix.height == matrix.width && latinColumns(matrix) && latinRows(matrix)
-
+    matrix.height == matrix.width && latinRows(matrix) && latinRows(transpose(matrix))
 
 /**
  * Средняя
@@ -289,15 +269,15 @@ fun isLatinSquare(matrix: Matrix<Int>): Boolean =
  */
 fun sumNeighbours(matrix: Matrix<Int>): Matrix<Int> {
     val mtrx = createMatrix(matrix.height, matrix.width, 0)
+    val neighbors = setOf(
+        Pair(1, 0), Pair(0, 1), Pair(-1, 0), Pair(0, -1),
+        Pair(1, 1), Pair(-1, -1), Pair(1, -1), Pair(-1, 1)
+    )
     for (i in 0 until matrix.height) {
         for (ii in 0 until matrix.width) {
-            mtrx[i, ii] =
-                matrix.getOrDefault(i + 1, ii, 0) + matrix.getOrDefault(i, ii + 1, 0) +
-                        matrix.getOrDefault(i - 1, ii, 0) + matrix.getOrDefault(i, ii - 1, 0) +
-                        matrix.getOrDefault(i + 1, ii + 1, 0) +
-                        matrix.getOrDefault(i - 1, ii - 1, 0) +
-                        matrix.getOrDefault(i + 1, ii - 1, 0) +
-                        matrix.getOrDefault(i - 1, ii + 1, 0)
+            for ((f, s) in neighbors) {
+                mtrx[i, ii] += matrix.getOrDefault(i + f, ii + s, 0)
+            }
         }
     }
     return mtrx
@@ -402,11 +382,11 @@ fun canOpenLock(key: Matrix<Int>, lock: Matrix<Int>): Triple<Boolean, Int, Int> 
     for (cm in 0..m) {
         for (ck in 0..k) {
             var ans = true
-            for (i in 0 until key.height) {
+            next@ for (i in 0 until key.height) {
                 for (ii in 0 until key.width) {
                     if (key[i, ii] == lock[i + cm, ii + ck]) {
                         ans = false
-                        break
+                        break@next
                     }
                 }
             }
@@ -478,18 +458,18 @@ operator fun Matrix<Int>.times(other: Matrix<Int>): Matrix<Int> {
  * 3 10 11  8
  */
 
-fun findValue(matrix: Matrix<Int>, value: Int): Pair<Int, Int> {
+fun findValue(matrix: Matrix<Int>, value: Int): Cell<Int, Int> {
     for (i in 0 until matrix.height) {
         for (ii in 0 until matrix.width) {
-            if (matrix[i, ii] == value) return Pair(i, ii)
+            if (matrix[i, ii] == value) return Cell(i, ii)
         }
-    }
-    return Pair(-1, -1)
+}
+return Cell(-1, -1)
 }
 
 
 fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
-    var zero = Cell(findValue(matrix, 0).first, findValue(matrix, 0).second)
+    var zero = Cell<Int, Int>(findValue(matrix, 0).row, findValue(matrix, 0).column)
     if (zero.row !in 0..15 || zero.column !in 0..15) throw IllegalStateException()
     for (i in moves.indices) {
         if (matrix.findNeighbour(zero.row, zero.column, moves[i], -1).first) {

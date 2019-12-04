@@ -5,25 +5,6 @@ package lesson8.task1
 import lesson1.task1.sqr
 import kotlin.math.*
 
-fun circleByPoint(points: List<Point>, obp: Point): Circle {
-    var newCircle = circleByDiameter(Segment(points[0], obp))
-    val np = mutableListOf<Point>()
-    np.add(points[0])
-    for (i in 1 until points.size) {
-        if (!newCircle.contains(points[i])) newCircle = circleByTwoPoints(np, points[i], obp)
-        np.add(points[i])
-    }
-    return newCircle
-}
-
-fun circleByTwoPoints(points: List<Point>, obp1: Point, obp2: Point): Circle {
-    var finalCircle = circleByDiameter(Segment(obp1, obp2))
-    for (p in points) {
-        if (!finalCircle.contains(p)) finalCircle = circleByThreePoints(p, obp1, obp2)
-    }
-    return finalCircle
-}
-
 /**
  * Точка на плоскости
  */
@@ -252,6 +233,25 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
     val mbc = bisectorByPoints(b, c)
     val x = mab.crossPoint(mbc)
     return Circle(x, x.distance(a))
+}
+
+fun circleByPoint(points: List<Point>, obp: Point): Circle {
+    var newCircle = circleByDiameter(Segment(points[0], obp))
+    val np = mutableListOf<Point>()
+    np.add(points[0])
+    for (i in 1 until points.size) {
+        if (!newCircle.contains(points[i])) newCircle = circleByTwoPoints(np, points[i], obp)
+        np.add(points[i])
+    }
+    return newCircle
+}
+
+fun circleByTwoPoints(points: List<Point>, obp1: Point, obp2: Point): Circle {
+    var finalCircle = circleByDiameter(Segment(obp1, obp2))
+    for (p in points) {
+        if (!finalCircle.contains(p)) finalCircle = circleByThreePoints(p, obp1, obp2)
+    }
+    return finalCircle
 }
 
 /**

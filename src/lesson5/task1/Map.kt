@@ -8,12 +8,12 @@ import java.lang.StringBuilder
 import kotlin.math.max
 
 
-fun namelist(n: Int, k: Int, a: List<List<Int>>, w: List<Int>, nl: List<String>, set: MutableSet<String>): Set<String> {
+fun nameList(n: Int, k: Int, a: List<List<Int>>, w: List<Int>, nl: List<String>, set: MutableSet<String>): Set<String> {
     if (a[n][k] == 0) return set
-    if (a[n - 1][k] == a[n][k]) namelist(n - 1, k, a, w, nl, set)
+    if (a[n - 1][k] == a[n][k]) nameList(n - 1, k, a, w, nl, set)
     else {
         set.add(nl[n])
-        namelist(n - 1, k - w[n], a, w, nl, set)
+        nameList(n - 1, k - w[n], a, w, nl, set)
     }
     return set
 }
@@ -406,7 +406,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
             else ob[n][cw] = ob[n - 1][cw]
         }
     }
-    return namelist(treasures.size, capacity, ob, w, namelist, fnl)
+    return nameList(treasures.size, capacity, ob, w, namelist, fnl)
 }
 
 

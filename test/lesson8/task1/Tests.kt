@@ -209,8 +209,10 @@ class Tests {
     @Tag("Hard")
     fun circleByThreePoints() {
         val result = circleByThreePoints(Point(5.0, 0.0), Point(3.0, 4.0), Point(0.0, -5.0))
+        val nresult = circleByThreePoints(Point(2.0, 2.0), Point(8.0, 2.0), Point(5.0, 7.0))
         assertTrue(result.center.distance(Point(0.0, 0.0)) < 1e-5)
         assertEquals(5.0, result.radius, 1e-5)
+        assertEquals(1.7, nresult.radius, 1e-5)
     }
 
     @Test
@@ -222,10 +224,21 @@ class Tests {
         val p4 = Point(3.0, -1.0)
         val p5 = Point(-3.0, -2.0)
         val p6 = Point(0.0, 5.0)
+        val np1 = Point(2.0, 2.0)
+        val np2 = Point(8.0, 2.0)
+        val np3 = Point(5.0, 7.0)
+        val np4 = Point(5.0, 3.0)
+        val np5 = Point(6.0, 3.0)
+        val np6 = Point(5.0, 5.0)
+        val nresult = minContainingCircle(np1, np2, np3, np4, np5, np6)
         val result = minContainingCircle(p1, p2, p3, p4, p5, p6)
         assertEquals(4.0, result.radius, 0.02)
         for (p in listOf(p1, p2, p3, p4, p5, p6)) {
             assertTrue(result.contains(p))
+        }
+        assertEquals(3.4, nresult.radius, 0.02)
+        for (p in listOf(np1, np2, np3, np4, np5, np6)) {
+            assertTrue(nresult.contains(p))
         }
     }
 }
