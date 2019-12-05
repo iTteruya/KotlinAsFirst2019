@@ -278,4 +278,3 @@ fun minContainingCircle(vararg points: Point): Circle {
     }
     return currentCircle
 }
-
