@@ -56,6 +56,15 @@ interface Matrix<E> {
         return l
     }
 
+    fun findValue(value: Int): Cell<Int, Int> {
+        for (i in 0 until height) {
+            for (ii in 0 until width) {
+                if (this[i, ii] == value) return Cell(i, ii)
+            }
+        }
+        return Cell(-1, -1)
+    }
+
     /**
      * Запись в ячейку.
      * Методы могут бросить исключение, если ячейка не существует

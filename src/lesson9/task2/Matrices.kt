@@ -458,18 +458,8 @@ operator fun Matrix<Int>.times(other: Matrix<Int>): Matrix<Int> {
  * 3 10 11  8
  */
 
-fun findValue(matrix: Matrix<Int>, value: Int): Cell<Int, Int> {
-    for (i in 0 until matrix.height) {
-        for (ii in 0 until matrix.width) {
-            if (matrix[i, ii] == value) return Cell(i, ii)
-        }
-    }
-    return Cell(-1, -1)
-}
-
-
 fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
-    var zero = Cell<Int, Int>(findValue(matrix, 0).row, findValue(matrix, 0).column)
+    var zero = Cell<Int, Int>(matrix.findValue(0).row, (matrix.findValue(0).column))
     if (zero.row !in 0..15 || zero.column !in 0..15) throw IllegalStateException()
     for (i in moves.indices) {
         if (matrix.findNeighbour(zero.row, zero.column, moves[i], -1).first) {
