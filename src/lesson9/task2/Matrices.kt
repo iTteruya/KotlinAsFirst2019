@@ -459,7 +459,7 @@ operator fun Matrix<Int>.times(other: Matrix<Int>): Matrix<Int> {
  */
 
 fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
-    var zero = Cell<Int, Int>(matrix.findValue(0).row, (matrix.findValue(0).column))
+    var zero = Cell(matrix.findValue(0).row, (matrix.findValue(0).column))
     if (zero.row !in 0..15 || zero.column !in 0..15) throw IllegalStateException()
     for (i in moves.indices) {
         if (matrix.findNeighbour(zero.row, zero.column, moves[i], -1).first) {

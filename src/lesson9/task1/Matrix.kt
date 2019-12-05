@@ -7,7 +7,7 @@ import java.lang.StringBuilder
 /**
  * Ячейка матрицы: row = ряд, column = колонка
  */
-data class Cell<T, U>(val row: Int, val column: Int)
+data class Cell(val row: Int, val column: Int)
 
 /**
  * Интерфейс, описывающий возможности матрицы. E = тип элемента матрицы
@@ -25,7 +25,7 @@ interface Matrix<E> {
      */
     operator fun get(row: Int, column: Int): E
 
-    operator fun get(cell: Cell<Any?, Any?>): E
+    operator fun get(cell: Cell): E
 
     fun getOrDefault(row: Int, column: Int, def: E): E {
         return if (row in 0 until height && column in 0 until width) get(row, column)
@@ -56,7 +56,7 @@ interface Matrix<E> {
         return l
     }
 
-    fun findValue(value: Int): Cell<Int, Int> {
+    fun findValue(value: Int): Cell {
         for (i in 0 until height) {
             for (ii in 0 until width) {
                 if (this[i, ii] == value) return Cell(i, ii)
@@ -71,7 +71,7 @@ interface Matrix<E> {
      */
     operator fun set(row: Int, column: Int, value: E)
 
-    operator fun set(cell: Cell<Any?, Any?>, value: E)
+    operator fun set(cell: Cell, value: E)
 }
 
 /**
@@ -100,13 +100,13 @@ class MatrixImpl<E>(override val height: Int, override val width: Int, e: E) : M
 
     override fun get(row: Int, column: Int): E = inf[row][column]
 
-    override fun get(cell: Cell<Any?, Any?>): E = get(cell.row, cell.column)
+    override fun get(cell: Cell): E = get(cell.row, cell.column)
 
     override fun set(row: Int, column: Int, value: E) {
         inf[row][column] = value
     }
 
-    override fun set(cell: Cell<Any?, Any?>, value: E) = set(cell.row, cell.column, value)
+    override fun set(cell: Cell, value: E) = set(cell.row, cell.column, value)
 
     override fun equals(other: Any?): Boolean {
         if (other is MatrixImpl<*> && height == other.height && width == other.width) {
