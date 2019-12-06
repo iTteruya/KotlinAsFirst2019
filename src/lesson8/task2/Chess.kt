@@ -277,7 +277,7 @@ fun findPath(
             l.add(path)
         }
         for (m in moves)
-            findPath(c + m.first, r + m.second, ans.toMutableList(), path, end, l)
+            findPath(c + m.first, r + m.second, ans.toMutableList(), path.toMutableList(), end, l)
     }
     return l
 }
