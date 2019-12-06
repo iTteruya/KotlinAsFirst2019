@@ -269,9 +269,7 @@ fun minContainingCircle(vararg points: Point): Circle {
     require(points.isNotEmpty())
     if (points.size == 1) return Circle(points[0], 0.0)
     var currentCircle = circleByDiameter(Segment(points[0], points[1]))
-    val cp = mutableListOf<Point>()
-    cp.add(points[0])
-    cp.add(points[1])
+    val cp = mutableListOf(points[0], points[1])
     for (i in 2 until points.size) {
         if (!currentCircle.contains(points[i])) currentCircle = circleByPoint(cp, points[i])
         cp.add(points[i])

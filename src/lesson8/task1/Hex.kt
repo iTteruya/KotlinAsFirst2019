@@ -3,9 +3,9 @@
 package lesson8.task1
 
 import java.lang.IllegalArgumentException
-import java.lang.Math.*
 import kotlin.math.round
 import kotlin.math.abs
+import kotlin.math.max
 
 data class Cube(val x: Double, val y: Double, val z: Double) {
     fun cubeToAxial(): HexPoint = HexPoint(x.toInt(), z.toInt())

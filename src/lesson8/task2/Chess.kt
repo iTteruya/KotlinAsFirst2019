@@ -277,7 +277,7 @@ fun findPath(
             l.add(path)
         }
         for (m in moves)
-            findPath(c + m.first, r + m.second, ans.toMutableList(), path.toMutableList(), end, l)
+            findPath(c + m.first, r + m.second, ans.toMutableList(), path, end, l)
     }
     return l
 }
@@ -285,6 +285,7 @@ fun findPath(
 fun knightTrajectory(start: Square, end: Square): List<Square> {
     require(start.inside() && end.inside())
     val minMoves = MutableList(8) { Square(0, 0) }
+    println(findPath(start.column, start.row, mutableListOf(), minMoves, end, mutableListOf()))
     val x = findPath(start.column, start.row, mutableListOf(), minMoves, end, mutableListOf()).groupBy { it.size }
     val min = x.minBy { it.key }!!.value
     return min[0]

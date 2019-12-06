@@ -198,16 +198,17 @@ fun alignFileByWidth(inputName: String, outputName: String) {
                 var nw = words.size
                 var s = (max - lngth) / nw
                 if (s * nw + lngth < max) s++
-                val line = StringBuilder()
-                for (word in words) {
-                    line.append(word)
-                    for (ii in 0 until s) line.append(" ")
-                    lngth += s
-                    nw--
-                    if ((lngth + nw * s > max) && (lngth + nw * (s - 1) >= max)) s--
+                val newline = buildString {
+                    for (word in words) {
+                        this.append(word)
+                        for (ii in 0 until s) this.append(" ")
+                        lngth += s
+                        nw--
+                        if ((lngth + nw * s > max) && (lngth + nw * (s - 1) >= max)) s--
+                    }
+                    this.append(last)
                 }
-                line.append(last)
-                it.write(line.toString())
+                it.write(newline)
                 it.newLine()
             }
         }
