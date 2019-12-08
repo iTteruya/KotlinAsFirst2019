@@ -230,8 +230,7 @@ fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> {
  */
 fun circleByPoint(points: List<Point>, obp: Point): Circle {
     var newCircle = circleByDiameter(Segment(points[0], obp))
-    val np = mutableListOf<Point>()
-    np.add(points[0])
+    val np = mutableListOf(points[0])
     for (i in 1 until points.size) {
         if (!newCircle.contains(points[i])) newCircle = circleByTwoPoints(np, points[i], obp)
         np.add(points[i])

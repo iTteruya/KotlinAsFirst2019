@@ -4,17 +4,6 @@ package lesson8.task2
 
 import kotlin.math.sign
 
-fun inReach(start: Square, end: Square): Square {
-    val a1 = start.row - start.column
-    val b1 = end.column + end.row
-    val x1 = (b1 - a1) / 2
-    val y1 = x1 + a1
-    val a2 = start.row + start.column
-    val b2 = end.row - end.column
-    val x2 = (a2 - b2) / 2
-    val y2 = x2 + b2
-    return if (Square(x1, y1).inside()) Square(x1, y1) else Square(x2, y2)
-}
 
 /**
  * Клетка шахматной доски. Шахматная доска квадратная и имеет 8 х 8 клеток.
@@ -164,6 +153,17 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> =
         else -> listOf(start, inReach(start, end), end)
     }
 
+fun inReach(start: Square, end: Square): Square {
+    val a1 = start.row - start.column
+    val b1 = end.column + end.row
+    val x1 = (b1 - a1) / 2
+    val y1 = x1 + a1
+    val a2 = start.row + start.column
+    val b2 = end.row - end.column
+    val x2 = (a2 - b2) / 2
+    val y2 = x2 + b2
+    return if (Square(x1, y1).inside()) Square(x1, y1) else Square(x2, y2)
+}
 
 /**
  * Средняя
