@@ -145,8 +145,12 @@ class Tests {
     @Test
     @Tag("Easy")
     fun circleByDiameter() {
+        val a = Point(0.9149722517151041, 0.4016314683302249)
+        val b = Point(0.3420884338491068, 0.6676413485147665)
+        val circle = circleByDiameter(Segment(a, b))
         assertEquals(Circle(Point(0.0, 1.0), 1.0), circleByDiameter(Segment(Point(0.0, 0.0), Point(0.0, 2.0))))
         assertEquals(Circle(Point(2.0, 1.5), 2.5), circleByDiameter(Segment(Point(4.0, 0.0), Point(0.0, 3.0))))
+        assertTrue(circle.contains(a) && circle.contains(b))
     }
 
     @Test
@@ -225,17 +229,14 @@ class Tests {
         val np1 = Point(2.0, 2.0)
         val np2 = Point(8.0, 2.0)
         val np3 = Point(5.0, 7.0)
-        val np4 = Point(5.0, 3.0)
-        val np5 = Point(6.0, 3.0)
-        val np6 = Point(5.0, 5.0)
-        val nresult = minContainingCircle(np1, np2, np3, np4, np5, np6)
+        val nresult = minContainingCircle(np1, np2, np3)
         val result = minContainingCircle(p1, p2, p3, p4, p5, p6)
         assertEquals(4.0, result.radius, 0.02)
         for (p in listOf(p1, p2, p3, p4, p5, p6)) {
             assertTrue(result.contains(p))
         }
         assertEquals(3.4, nresult.radius, 0.02)
-        for (p in listOf(np1, np2, np3, np4, np5, np6)) {
+        for (p in listOf(np1, np2, np3)) {
             assertTrue(nresult.contains(p))
         }
     }

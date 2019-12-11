@@ -187,26 +187,26 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     }
     File(outputName).bufferedWriter().use {
         for (line in text) {
-            val all = line.split(Regex("""\s+"""))
-            if (all.size == 1) {
+            val allWords = line.split(Regex("""\s+"""))
+            if (allWords.size == 1) {
                 it.write(line)
                 it.newLine()
             } else {
-                val last = all.last()
-                val words = all.dropLast(1)
-                var lngth = Regex("""\s+""").replace(line, "").length
-                var nw = words.size
-                var s = (max - lngth) / nw
-                if (s * nw + lngth < max) s++
+                val lastWord = allWords.last()
+                val words = allWords.dropLast(1)
+                var currentLength = Regex("""\s+""").replace(line, "").length
+                var numOfWords = words.size
+                var s = (max - currentLength) / numOfWords
+                if (s * numOfWords + currentLength < max) s++
                 val newline = buildString {
                     for (word in words) {
                         this.append(word)
                         for (ii in 0 until s) this.append(" ")
-                        lngth += s
-                        nw--
-                        if ((lngth + nw * s > max) && (lngth + nw * (s - 1) >= max)) s--
+                        currentLength += s
+                        numOfWords--
+                        if ((currentLength + numOfWords * s > max) && (currentLength + numOfWords * (s - 1) >= max)) s--
                     }
-                    this.append(last)
+                    this.append(lastWord)
                 }
                 it.write(newline)
                 it.newLine()
@@ -238,7 +238,7 @@ fun top20Words(inputName: String): Map<String, Int> {
     val list = Regex("""[A-Za-zА-Яа-яЁё]+""").findAll(text).map { it.value }.toList()
     val map = mutableMapOf<String, Int>()
     for (key in list) {
-        if (map.containsKey(key)) map[key] = map[key]!! + 1
+        if (map.containsKey(key)) map[key] = map.getOrDefault(key, 1) + 1
         else map[key] = 1
     }
     return map.toList().sortedByDescending { it.second }.take(20).toMap()
