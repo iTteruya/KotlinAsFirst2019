@@ -238,8 +238,7 @@ fun top20Words(inputName: String): Map<String, Int> {
     val list = Regex("""[A-Za-zА-Яа-яЁё]+""").findAll(text).map { it.value }.toList()
     val map = mutableMapOf<String, Int>()
     for (key in list) {
-        if (map.containsKey(key)) map[key] = map.getOrDefault(key, 1) + 1
-        else map[key] = 1
+        map[key] = map.getOrDefault(key, 0) + 1
     }
     return map.toList().sortedByDescending { it.second }.take(20).toMap()
 }
